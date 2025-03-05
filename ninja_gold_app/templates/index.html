@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <title>Ninja Gold</title>
+  </head>
+  <body>
+    <div id="container">
+      <h3>Your Ninja Gold Total is {{request.session.gold}}</h3>
+      <div style="text-align: center">
+        <img
+          src="{% static 'images/Gold Ninja.jpg' %}"
+          alt="Gold Ninja"
+          style="width: 100px; height: auto"
+        />
+      </div>
+      <a href="/reset">Reset Gold</a> <br />
+      <div class="location">
+        <h2>Farm</h2>
+        <p>(Earns 10-20 ounces of gold)</p>
+        <form action="/process_money" method="POST">
+          {%csrf_token%}
+          <input type="hidden" name="building" value="farm" />
+          <input class="gold" type="submit" value="Find Gold!" />
+        </form>
+      </div>
+
+      <div class="location">
+        <h2>Cave</h2>
+        <p>(Earns 5-10 ounces of gold)</p>
+        <form action="/process_money" method="POST">
+          {%csrf_token%}
+          <input type="hidden" name="building" value="cave" />
+          <input class="gold" type="submit" value="Find Gold!" />
+        </form>
+      </div>
+
+      <div class="location">
+        <h2>House</h2>
+        <p>(Earns 2-5 ounces of gold)</p>
+        <form action="/process_money" method="POST">
+          {%csrf_token%}
+          <input type="hidden" name="building" value="house" />
+          <input class="gold" type="submit" value="Find Gold!" />
+        </form>
+      </div>
+
+      <div class="location">
+        <h2>Casino</h2>
+        <p>(Earns/lose 0-50 ounces of gold)</p>
+        <form action="/process_money" method="POST">
+          {%csrf_token%}
+          <input type="hidden" name="building" value="casino" />
+          <input class="gold" type="submit" value="Find Gold!" />
+        </form>
+      </div>
+
+      <h3>Activities</h3>
+      <!-- <div class="activity">
+        <h3>Gold Activities</h3>
+        {% for activity in request.session.activites %}
+        <p class="red">{{activity}}</p>
+        {% endfor %}
+      </div> -->
+
+      <div class="activity">
+        {%for activity in request.session.activites%} {%if "Yay" in activity%}
+        <p class="green">{{activity}}</p>
+        {% else %}
+        <p class="red">{{activity}}</p>
+        {% endif %} {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

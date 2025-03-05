@@ -1,0 +1,5 @@
+1) Create a new project/app
+2) Have the root route render the main Ninja Gold page
+3) NINJA BONUS: Refactor your code so the location is being passed in the URL rather than via a form
+4) SENSEI BONUS: Have the user specify the win conditions before starting, and then implement them in the game (# of moves, goal for gold)
+5) Have the "/process-money" POST route increase/decrease the user's gold by an appropriate amount and redirect to the root route

@@ -14,3 +14,5 @@ display past activities of this ninja. Guidelines
 *	In other words, you want to include a hidden value in the form and have each form submit the form information to /process_money.
 * Have /process_money determine how much gold the user should have.
 *	You should only have 2 routes -- '/' and '/process_money' (reset can be another route if you implement this feature).
+
+![Image](https://github.com/user-attachments/assets/8ddd2133-83de-44f1-9deb-2cd88badfb58)

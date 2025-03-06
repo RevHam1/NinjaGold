@@ -76,12 +76,6 @@
       </p>
 
       <h3>Activities</h3>
-      <!-- <div class="activity">
-        <h3>Gold Activities</h3>
-        {% for activity in request.session.activites %}
-        <p class="red">{{activity}}</p>
-        {% endfor %}
-      </div> -->
 
       <div class="activity">
         {%for activity in request.session.activites%} {%if "Yay" in activity%}

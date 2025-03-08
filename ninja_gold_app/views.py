@@ -42,16 +42,36 @@ def process_money(request):
             f"You Stolen {num} ounces of Gold from a House! Yay!")
 
     elif building == 'casino':
-        num = random.randint(-50, 50)
+        # Customizing probability for losing or winning
+        num = random.choices(
+            population=[random.randint(-50, -1), random.randint(1, 50), 0],
+            # 60% chance to lose, 30% to win, 10% to earn nothing
+            weights=[60, 30, 10],
+            k=1
+        )[0]  # random.choices returns a list, so extract the first element
+
         request.session['gold'] += num
         if num > 0:
             request.session['activites'].append(
                 f"You Won {num} ounces of Gold at the Casino! Yay!")
         elif num == 0:
-            request.session['activites'].append("You earned nothing")
+            request.session['activites'].append(
+                "You Won nothing at the Casino. Oh Well...")
         else:
             request.session['activites'].append(
                 f"You Lost {abs(num)} ounces of Gold at the Casino! Boooo!!")
+
+    # elif building == 'casino':
+    #     num = random.randint(-50, 50)
+    #     request.session['gold'] += num
+    #     if num > 0:
+    #         request.session['activites'].append(
+    #             f"You Won {num} ounces of Gold at the Casino! Yay!")
+    #     elif num == 0:
+    #         request.session['activites'].append("You earned nothing")
+    #     else:
+    #         request.session['activites'].append(
+    #             f"You Lost {abs(num)} ounces of Gold at the Casino! Boooo!!")
 
     # Mark the building as used
     request.session['used_buildings'].append(building)

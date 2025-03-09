@@ -88,9 +88,21 @@ def process_money(request):
     if 'used_buildings' not in request.session:
         request.session['used_buildings'] = []
 
+    # Initialize casino visit counter in the session if it doesn't exist
+    if 'casino_visits' not in request.session:
+        request.session['casino_visits'] = 0
+
     # Check if the building has already been used
-    if building in request.session['used_buildings']:
-        # Skip processing without appending any message to activities
+    if building in request.session['used_buildings'] and building != 'casino':
+        # Skip processing without appending any message to activities for non-casino buildings
+        request.session.modified = True
+        return redirect('/')
+
+    # Check if the user exceeds 7 casino visits
+    if building == 'casino' and request.session['casino_visits'] >= 15:
+        request.session['activites'].append(
+            "You have reached the maximum number of Casino visits (15). Take the GOLD and Run!"
+        )
         request.session.modified = True
         return redirect('/')
 
@@ -105,47 +117,67 @@ def process_money(request):
 
     # Regular building logic
     if building == 'farm':
-        num = random.randint(20, 30)
+        num = random.randint(50, 100)
         request.session['gold'] += num
         request.session['used_buildings'].append('farm')  # Mark as used
         request.session['activites'].append(
-            f"You Found {num} ounces of Gold on a Farm! Yay!")
+            f"You Found {num} ounces of Gold on a Farm! Yay!"
+        )
 
     elif building == 'cave':
-        num = random.randint(30, 50)
+        num = random.randint(100, 250)
         request.session['gold'] += num
         request.session['used_buildings'].append('cave')  # Mark as used
         request.session['activites'].append(
-            f"You Found {num} ounces of Gold in a Cave! Yay!")
+            f"You Found {num} ounces of Gold in a Cave! Yay!"
+        )
 
     elif building == 'house':
-        num = random.randint(2, 10)
+        num = random.randint(20, 50)
         request.session['gold'] += num
         request.session['used_buildings'].append('house')  # Mark as used
         request.session['activites'].append(
-            f"You Stole {num} ounces of Gold from a House! Yay!")
+            f"You Stole {num} ounces of Gold from a House! Yay!"
+        )
 
     elif building == 'casino':
-        # If user has enough gold, process the casino logic
+        # Increment the casino visit counter
+        request.session['casino_visits'] += 1
+
+        # Process the casino logic
         num = random.choices(
             population=[random.randint(-50, -1), random.randint(1, 50), 0],
             # 70% chance to lose, 20% chance to win, 10% nothing
-            weights=[70, 20, 10],
+            weights=[85, 10, 5],
             k=1
         )[0]  # Extract the random number result
 
         request.session['gold'] += num
         if num > 0:
             request.session['activites'].append(
-                f"You Won {num} ounces of Gold at the Casino! Yay!")
+                f"You Won {num} ounces of Gold at the Casino! Yay!"
+            )
         elif num == 0:
             request.session['activites'].append(
-                "You Won nothing at the Casino. Oh Well...")
+                "You Won nothing at the Casino. Oh Well..."
+            )
         else:
             request.session['activites'].append(
-                f"You Lost {abs(num)} ounces of Gold at the Casino! Boooo!!")
+                f"You Lost {abs(num)} ounces of Gold at the Casino! Boooo!!"
+            )
 
-    # Mark the building as used and ensure session updates are saved
+    # Check if all conditions are met
+    farm_used = 'farm' in request.session['used_buildings']
+    cave_used = 'cave' in request.session['used_buildings']
+    house_used = 'house' in request.session['used_buildings']
+    negative_gold = request.session['gold'] < 0
+    max_casino_visits_reached = request.session.get('casino_visits', 0) >= 15
+
+    # Store the result in a session variable
+    request.session['all_lost_conditions_met'] = farm_used and cave_used and house_used and negative_gold
+    request.session['win_condition_met'] = max_casino_visits_reached
+
+    # Ensure session updates are saved
     request.session.modified = True
     return redirect('/')
 

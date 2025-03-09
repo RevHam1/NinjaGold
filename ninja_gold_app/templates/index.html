@@ -11,6 +11,34 @@
   <body>
     <div id="container">
       <h3>My Ninja Gold Total is {{request.session.gold}}</h3>
+      {% if request.session.all_lost_conditions_met %}
+      <p
+        style="
+          color: white;
+          text-align: center;
+          margin-top: -15px;
+          margin-bottom: 25px;
+          font-size: x-large;
+        "
+      >
+        You've been "Casinoing" too much. You "LOST" Take a break and Reset
+        Gold.
+      </p>
+      {% elif request.session.win_condition_met %}
+      <p
+        style="
+          color: gold;
+          text-align: center;
+          margin-top: -15px;
+          margin-bottom: 25px;
+          font-size: xx-large;
+        "
+      >
+        Congratulations! You've reached the maximum Casino visits and secured a
+        "BIG WIN!"
+      </p>
+      {% endif %}
+
       <div style="text-align: center">
         <img
           src="{% static 'images/Gold Ninja.jpg' %}"
@@ -26,7 +54,7 @@
       <br />
       <div class="location">
         <h2>Farm</h2>
-        <p>(Earns 20-30 ounces of gold)</p>
+        <p>(Earns 50-100 ounces of gold)</p>
         <form action="/process_money" method="POST">
           {% csrf_token %}
           <input type="hidden" name="building" value="farm" />
@@ -39,7 +67,7 @@
 
       <div class="location">
         <h2>Cave</h2>
-        <p>(Earns 30-50 ounces of gold)</p>
+        <p>(Earns 100-250 ounces of gold)</p>
         <form action="/process_money" method="POST">
           {% csrf_token %}
           <input type="hidden" name="building" value="cave" />
@@ -52,7 +80,7 @@
 
       <div class="location">
         <h2>House</h2>
-        <p>(Earns 2-10 ounces of gold)</p>
+        <p>(Earns 20-50 ounces of gold)</p>
         <form action="/process_money" method="POST">
           {% csrf_token %}
           <input type="hidden" name="building" value="house" />
@@ -62,6 +90,38 @@
         <p style="color: red; font-size: medium">You've stolen from a House.</p>
         {% endif %}
       </div>
+
+      <!-- <div class="location">
+        <h2>Casino</h2>
+        {% if request.session.casino_visits < 16 %}
+        <p>(Earns/lose 0-50 ounces of gold)</p>
+        <form action="/process_money" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="building" value="casino" />
+          <input class="gold" type="submit" value="Find Gold!" />
+        </form>
+        {% else %}
+        <p
+          style="
+            color: red;
+            text-align: center;
+            font-size: medium;
+            margin-bottom: 10px;
+          "
+        >
+          (Earns/lose 0-50 ounces of gold)
+        </p>
+        <form action="#">
+          <input
+            class="gold"
+            type="submit"
+            value="Find Gold!"
+            disabled
+            style="background-color: gray; color: white; cursor: not-allowed"
+          />
+        </form>
+        {% endif %}
+      </div> -->
 
       <div class="location">
         <h2>Casino</h2>
@@ -75,7 +135,9 @@
         <p>Find Gold Until...</p>
         {% if 'casino' in request.session.used_buildings %}
         <p style="color: red; font-size: medium">You've been to the Casino.</p>
-        {% endif %} {% else %}
+        {% endif %}
+        <!-- space -->
+        {% else %}
         <p style="color: red; font-size: medium; text-align: center">
           No Gold! No Casino!
           <input class="gold" type="submit" value="Need Gold!" />

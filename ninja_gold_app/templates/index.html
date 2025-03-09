@@ -15,10 +15,15 @@
         <img
           src="{% static 'images/Gold Ninja.jpg' %}"
           alt="Gold Ninja"
-          style="width: 100px; height: auto"
+          style="width: 100px; height: auto; margin-bottom: 20px"
         />
       </div>
-      <a href="/reset">Reset Gold</a> <br />
+      <a
+        style="color: gold; font-size: xx-large; text-shadow: 2px 2px 4px green"
+        href="/reset"
+        >Reset Gold</a
+      >
+      <br />
       <div class="location">
         <h2>Farm</h2>
         <p>(Earns 20-30 ounces of gold)</p>
@@ -67,6 +72,7 @@
           <input type="hidden" name="building" value="casino" />
           <input class="gold" type="submit" value="Find Gold!" />
         </form>
+        <p>Find Gold Until...</p>
         {% if 'casino' in request.session.used_buildings %}
         <p style="color: red; font-size: medium">You've been to the Casino.</p>
         {% endif %} {% else %}
@@ -91,8 +97,8 @@
       </div> -->
 
       <p style="color: white; text-align: center; font-size: larger">
-        Find Gold in each area above and see your Gold grow but be careful at
-        the Casino. Seaarch their Until...
+        Find Gold in each area above and see your Gold grow. But be careful at
+        the Casino...
       </p>
 
       <h3>Activities</h3>

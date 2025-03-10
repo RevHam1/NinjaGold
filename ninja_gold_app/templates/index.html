@@ -82,113 +82,85 @@
         >Reset Gold</a
       >
       <br />
-      <div class="location">
-        <h2>Farm</h2>
-        <p>(Earns 50-100 ounces of gold)</p>
-        <form action="/process_money" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="building" value="farm" />
-          <input class="gold" type="submit" value="Find Gold!" />
-        </form>
-        {% if 'farm' in request.session.used_buildings %}
-        <p style="color: red; font-size: medium">You've searched on a Farm.</p>
-        {% endif %}
+      <div class="location-container">
+        <div class="location">
+          <h2>Farm</h2>
+          <p>(Earns 50-100 ounces of gold)</p>
+          <form action="/process_money" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="building" value="farm" />
+            <input class="gold" type="submit" value="Find Gold!" />
+          </form>
+          {% if 'farm' in request.session.used_buildings %}
+          <p style="color: red; font-size: medium">
+            You've searched on a Farm.
+          </p>
+          {% endif %}
+        </div>
+
+        <div class="location">
+          <h2>Cave</h2>
+          <p>(Earns 100-250 ounces of gold)</p>
+          <form action="/process_money" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="building" value="cave" />
+            <input class="gold" type="submit" value="Find Gold!" />
+          </form>
+          {% if 'cave' in request.session.used_buildings %}
+          <p style="color: red; font-size: medium">
+            You've searched in a Cave.
+          </p>
+          {% endif %}
+        </div>
+
+        <div class="location">
+          <h2>House</h2>
+          <p>(Earns 20-50 ounces of gold)</p>
+          <form action="/process_money" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="building" value="house" />
+            <input class="gold" type="submit" value="Find Gold!" />
+          </form>
+          {% if 'house' in request.session.used_buildings %}
+          <p style="color: red; font-size: medium">
+            You've stolen from a House.
+          </p>
+          {% endif %}
+        </div>
+
+        <div class="location">
+          <h2>Casino</h2>
+          {% if request.session.gold > 0 %}
+          <p>(Earns/lose 0-50 ounces of gold)</p>
+          <form action="/process_money" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="building" value="casino" />
+            <input class="gold" type="submit" value="Find Gold!" />
+          </form>
+          <p>Find Gold Until...</p>
+          {% if 'casino' in request.session.used_buildings %}
+          <p style="color: red; font-size: medium">
+            You've been to the Casino.
+          </p>
+          {% endif %}
+          <!-- space -->
+          {% else %}
+          <p style="color: red; font-size: medium; text-align: center">
+            No Gold! No Casino!
+            <input class="gold" type="submit" value="Need Gold!" />
+          </p>
+          {% endif %}
+        </div>
       </div>
 
-      <div class="location">
-        <h2>Cave</h2>
-        <p>(Earns 100-250 ounces of gold)</p>
-        <form action="/process_money" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="building" value="cave" />
-          <input class="gold" type="submit" value="Find Gold!" />
-        </form>
-        {% if 'cave' in request.session.used_buildings %}
-        <p style="color: red; font-size: medium">You've searched in a Cave.</p>
-        {% endif %}
-      </div>
-
-      <div class="location">
-        <h2>House</h2>
-        <p>(Earns 20-50 ounces of gold)</p>
-        <form action="/process_money" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="building" value="house" />
-          <input class="gold" type="submit" value="Find Gold!" />
-        </form>
-        {% if 'house' in request.session.used_buildings %}
-        <p style="color: red; font-size: medium">You've stolen from a House.</p>
-        {% endif %}
-      </div>
-
-      <!-- <div class="location">
-        <h2>Casino</h2>
-        {% if request.session.casino_visits < 16 %}
-        <p>(Earns/lose 0-50 ounces of gold)</p>
-        <form action="/process_money" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="building" value="casino" />
-          <input class="gold" type="submit" value="Find Gold!" />
-        </form>
-        {% else %}
-        <p
-          style="
-            color: red;
-            text-align: center;
-            font-size: medium;
-            margin-bottom: 10px;
-          "
-        >
-          (Earns/lose 0-50 ounces of gold)
-        </p>
-        <form action="#">
-          <input
-            class="gold"
-            type="submit"
-            value="Find Gold!"
-            disabled
-            style="background-color: gray; color: white; cursor: not-allowed"
-          />
-        </form>
-        {% endif %}
-      </div> -->
-
-      <div class="location">
-        <h2>Casino</h2>
-        {% if request.session.gold > 0 %}
-        <p>(Earns/lose 0-50 ounces of gold)</p>
-        <form action="/process_money" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="building" value="casino" />
-          <input class="gold" type="submit" value="Find Gold!" />
-        </form>
-        <p>Find Gold Until...</p>
-        {% if 'casino' in request.session.used_buildings %}
-        <p style="color: red; font-size: medium">You've been to the Casino.</p>
-        {% endif %}
-        <!-- space -->
-        {% else %}
-        <p style="color: red; font-size: medium; text-align: center">
-          No Gold! No Casino!
-          <input class="gold" type="submit" value="Need Gold!" />
-        </p>
-        {% endif %}
-      </div>
-
-      <!-- <div class="location">
-        <h2>Casino</h2>
-        <p>(Earns/lose 0-50 ounces of gold)</p>
-        <form action="/process_money" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="building" value="casino" />
-          <input class="gold" type="submit" value="Find Gold!" />
-        </form>
-        {% if 'casino' in request.session.used_buildings %}
-        <p style="color: red; font-size: medium">You've been to the Casino.</p>
-        {% endif %}
-      </div> -->
-
-      <p style="color: white; text-align: center; font-size: larger">
+      <p
+        style="
+          color: white;
+          margin-bottom: 25px;
+          text-align: center;
+          font-size: larger;
+        "
+      >
         Find Gold in each area above and see your Gold grow. But be careful at
         the Casino...
       </p>

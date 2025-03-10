@@ -1,76 +1,149 @@
 * {
   margin: 0px;
   padding: 0px;
+  box-sizing: border-box; /* Ensures padding and borders are included in width/height calculations */
 }
 
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Responsive container */
 #container {
   background-color: black;
-  width: 1250px;
+  max-width: 1250px;
   margin: 0 auto;
-  padding-left: 30px;
-  padding-bottom: 40px;
+  padding: 20px 15px;
+  display: flex; /* Makes it flexible */
+  flex-direction: column; /* Default direction is column */
+  align-items: center; /* Centers children horizontally */
 }
 
+/* Links styling */
 a {
   color: gold;
   font-size: 20px;
   text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+/* Use flex for location cards */
+.location-container {
+  display: flex; /* Enables a row layout for location cards */
+  flex-wrap: wrap; /* Allows cards to wrap on smaller screens */
+  justify-content: center; /* Centers cards within the container */
+  gap: 20px; /* Adds space between the cards */
 }
 
 .location {
   background-color: #00ff7f;
   margin: 10px;
   padding: 20px;
-  width: 240px;
+  width: 100%; /* Default to full width */
+  max-width: 240px; /* Limit the maximum width of the cards */
   text-align: center;
   border: 2px solid black;
-  display: inline-block;
+  border-radius: 10px; /* Added some rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for better visuals */
 }
 
+/* Headings */
 h2 {
-  font-size: 27px;
+  font-size: 1.5em;
 }
 
 h3 {
   color: white;
   text-align: center;
-  padding-top: 35px;
   margin-bottom: 25px;
-  font-size: 30px;
+  font-size: 2em;
 }
 
+/* Paragraphs */
 p {
   margin-top: 15px;
+  line-height: 1.5;
 }
+
+/* Gold button */
 .gold {
   margin-top: 15px;
   background-color: gold;
   font-size: 15px;
-  padding: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 10px 10px 10px 10px;
+  padding: 10px 15px;
+  border: none; /* Removes default borders */
+  border-radius: 10px;
+  cursor: pointer; /* Adds a hand cursor */
+  transition: background-color 0.3s ease; /* Smooth background color transition */
 }
 
+.gold:hover {
+  background-color: darkgoldenrod; /* Darker gold color on hover */
+}
+
+/* Activity log */
 .activity {
   background-color: gold;
-  width: 800px;
+  width: 100%;
+  max-width: 800px; /* Limits the width of the activity log */
   padding: 20px;
   text-align: center;
-  margin: 0 auto;
-  padding-left: 30px;
+  margin: 20px auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for activity log */
 }
 
 .activity p {
-  font-size: 20px;
+  font-size: 1.2em;
   font-weight: bolder;
 }
 
+/* Colors for activity */
 .red {
   color: red;
-  font-size: 25px;
+  font-size: 1.5em;
 }
 
 .green {
   color: green;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  #container {
+    padding: 10px;
+  }
+
+  h3 {
+    font-size: 1.5em;
+  }
+
+  .location {
+    margin: 10px auto;
+  }
+
+  .gold {
+    font-size: 14px;
+  }
+
+  .activity {
+    padding: 15px;
+    width: 90%; /* Use 90% of the screen width */
+  }
+}
+
+@media (max-width: 480px) {
+  h3 {
+    font-size: 1.2em;
+  }
+
+  .gold {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .location {
+    padding: 15px;
+  }
 }

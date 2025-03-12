@@ -97,15 +97,22 @@ WSGI_APPLICATION = 'ninja_gold.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv('DATABASE_URL'),
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
+
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+        default=config('DATABASE_URL'),  # Pulls the full connection string from DATABASE_URL
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=True,
     )
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

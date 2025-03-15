@@ -150,7 +150,7 @@ p {
 @media (max-width: 480px) {
   /* Top Strea */
   h3 {
-    font-size: 1.2em;
+    font-size: 1em;
   }
 
   img {
@@ -160,7 +160,7 @@ p {
   }
 
   a {
-    font-size: 1em;
+    font-size: 0.5em;
     color: gold;
     text-shadow: 2px 2px 4px green;
     margin-bottom: -5px;

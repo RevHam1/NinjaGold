@@ -160,10 +160,11 @@ p {
   }
 
   a {
-    font-size: 0.5em;
+    font-size: 1em;
     color: gold;
     text-shadow: 2px 2px 4px green;
     margin-bottom: -5px;
+    max-width: fit-content;
   }
 
   .note {

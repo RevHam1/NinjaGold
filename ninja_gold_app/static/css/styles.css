@@ -150,7 +150,8 @@ p {
 @media (max-width: 480px) {
   /* Top Strea */
   h3 {
-    font-size: 1em;
+    /* font-size: 1em; */
+    font-size: 0.8em;
   }
 
   img {
@@ -164,7 +165,10 @@ p {
     color: gold;
     text-shadow: 2px 2px 4px green;
     margin-bottom: -5px;
-    max-width: fit-content;
+    /* max-width: fit-content; */
+
+    max-width: 100%;
+    display: block; /* Makes the link take full width */
   }
 
   .note {

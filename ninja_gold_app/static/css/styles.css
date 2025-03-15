@@ -19,6 +19,12 @@ body {
   align-items: center; /* Centers children horizontally */
 }
 
+.flex-div {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 /* Links styling */
 a {
   color: gold;
@@ -149,7 +155,13 @@ p {
 
 @media (max-width: 480px) {
   /* Top Strea */
-  h3 {
+  .flex-div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  #container h3 {
     /* font-size: 1em; */
     font-size: 0.8em;
   }
@@ -163,10 +175,9 @@ p {
   a {
     font-size: 1em;
     color: gold;
-    text-shadow: 2px 2px 4px green;
+    /* text-shadow: 2px 2px 4px green; */
     margin-bottom: -5px;
     /* max-width: fit-content; */
-
     max-width: 100%;
     display: block; /* Makes the link take full width */
   }

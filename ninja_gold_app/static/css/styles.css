@@ -166,7 +166,7 @@ p {
   }
 
   img {
-    width: 75px;
+    width: 85px;
     height: auto;
     margin-top: -12px;
     margin-bottom: -12px;
@@ -209,7 +209,7 @@ p {
 
   p {
     /* margin-top: 0.3em; */
-    line-height: 1.6em;
+    line-height: 1.9em;
     flex: 4;
     flex-basis: 30%;
     /* width: 200px; */

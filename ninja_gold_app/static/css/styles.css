@@ -154,13 +154,13 @@ p {
   }
 
   img {
-    width: 75px;
+    width: 65px;
     height: auto;
     margin-bottom: -8px;
   }
 
   a {
-    font-size: 1.4em;
+    font-size: 1em;
     color: gold;
     text-shadow: 2px 2px 4px green;
     margin-bottom: -5px;

@@ -166,14 +166,14 @@ p {
   }
 
   img {
-    width: 85px;
+    width: 65px;
     height: auto;
     margin-top: -12px;
     margin-bottom: -12px;
   }
 
   a {
-    font-size: 1em;
+    font-size: 0.8em;
     color: gold;
     /* text-shadow: 2px 2px 4px green; */
     margin-bottom: -5px;
@@ -187,7 +187,7 @@ p {
     margin-bottom: 0px;
     margin-top: -3px;
     text-align: center;
-    font-size: 0.7em;
+    font-size: 0.6em;
   }
 
   /* Locations */
@@ -218,7 +218,7 @@ p {
   }
 
   .gold {
-    font-size: 18px;
+    font-size: 20px;
     margin-top: -0px;
     margin-bottom: -12px;
     padding: 8px 10px;

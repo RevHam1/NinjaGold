@@ -109,7 +109,10 @@
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
           {% if 'cave' in request.session.used_buildings %}
-          <p class="been" style="color: red; font-size: small">
+          <p
+            class="been"
+            style="color: red; font-size: small; margin: 0px 20px"
+          >
             You've searched in a Cave.
           </p>
           {% endif %}
@@ -124,7 +127,7 @@
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
           {% if 'house' in request.session.used_buildings %}
-          <p style="color: red; font-size: small">
+          <p style="color: red; font-size: small; margin: 0px 20px">
             You've stolen from a House.
           </p>
           {% endif %}

@@ -91,7 +91,12 @@
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
           {% if 'farm' in request.session.used_buildings %}
-          <p style="color: red; font-size: small">You've searched on a Farm.</p>
+          <p
+            class="been"
+            style="color: red; font-size: small; margin: 0px 20px"
+          >
+            You've searched on a Farm.
+          </p>
           {% endif %}
         </div>
 
@@ -104,7 +109,9 @@
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
           {% if 'cave' in request.session.used_buildings %}
-          <p style="color: red; font-size: small">You've searched in a Cave.</p>
+          <p class="been" style="color: red; font-size: small">
+            You've searched in a Cave.
+          </p>
           {% endif %}
         </div>
 
@@ -126,15 +133,15 @@
         <div class="location">
           <h2>Casino</h2>
           {% if request.session.gold > 0 %}
-          <p>(Earns/lose 0-50 ounces of gold)</p>
+          <p>(Earn/lose 0-50 Gold ounces)</p>
           <form action="/process_money" method="POST">
             {% csrf_token %}
             <input type="hidden" name="building" value="casino" />
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
-          <p>Find Gold Until...</p>
+          <p class="until">Find Gold Until...</p>
           {% if 'casino' in request.session.used_buildings %}
-          <p style="color: red; font-size: medium">
+          <p class="been" style="color: red; font-size: medium">
             You've been to the Casino.
           </p>
           {% endif %}

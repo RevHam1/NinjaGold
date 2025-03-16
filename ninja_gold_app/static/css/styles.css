@@ -53,7 +53,7 @@ img {
   margin: 0px;
   padding: 20px;
   width: 100%; /* Default to full width */
-  max-width: 210px; /* Limit the maximum width of the cards */
+  max-width: 260px; /* Limit the maximum width of the cards */
   text-align: center;
   border: 2px solid black;
   border-radius: 10px; /* Added some rounded corners */
@@ -173,7 +173,7 @@ p {
   }
 
   a {
-    font-size: 0.6em;
+    font-size: 0.8em;
     color: gold;
     /* text-shadow: 2px 2px 4px green; */
     margin-bottom: -5px;
@@ -218,11 +218,22 @@ p {
   }
 
   .gold {
-    font-size: 38px;
+    font-size: 15px;
     margin-top: -0px;
     margin-bottom: -12px;
+    margin: 0px 20px;
     padding: 8px 10px;
   }
+
+  .until {
+    margin: 0px 30px;
+    margin-top: 3px;
+    margin-bottom: -10px;
+  }
+
+  /* div .been {
+    margin-bottom: -30px;
+  } */
 
   /* Activities */
   h4 {

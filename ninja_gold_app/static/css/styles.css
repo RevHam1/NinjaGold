@@ -162,7 +162,7 @@ p {
   }
 
   #container h3 {
-    font-size: 1em;
+    font-size: 1em !important;
   }
 
   img {
@@ -223,7 +223,7 @@ p {
     font-size: 15px;
     margin-top: -0px;
     margin-bottom: -12px;
-    margin: 0px 35px;
+    margin: 0px 40px;
     padding: 8px 10px;
   }
 

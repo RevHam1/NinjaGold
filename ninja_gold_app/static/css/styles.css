@@ -182,7 +182,7 @@ p {
     text-align: center;
     margin-top: -15px;
     margin-bottom: 25px;
-    font-size: 1.3em;
+    font-size: 1em;
   }
 
   .win {
@@ -190,11 +190,11 @@ p {
     text-align: center;
     margin-top: -15px;
     margin-bottom: 25px;
-    font-size: 1.3em;
+    font-size: 1em;
   }
 
   #container h3 {
-    font-size: 1.3em;
+    font-size: 1em;
   }
 
   img {

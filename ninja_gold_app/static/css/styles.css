@@ -189,7 +189,7 @@ p {
   .my-total {
     font-size: 1em;
     padding: 0px 5px;
-    min-width: 200px
+    min-width: 200px;
     white-space: nowrap;
   }
 

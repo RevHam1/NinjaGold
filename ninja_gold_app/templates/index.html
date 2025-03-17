@@ -17,8 +17,8 @@
       <h3>My Ninja Gold Total is {{request.session.gold}}</h3>
       {% if request.session.all_lost_conditions_met %}
       <p class="loose">
-        > You've been at the "Casinoi" too long. You "LOST" Take a break or
-        Reset Gold.
+        You've been at the "Casinoi" too long. You "LOST" Take a break or Reset
+        Gold.
       </p>
       {% elif request.session.win_condition_met %}
       <p class="win">
@@ -68,7 +68,7 @@
       <div class="location-container">
         <div class="location">
           <h2>Farm</h2>
-          <p>(Earns 50-100 ounces of gold)</p>
+          <p>Earns 50-100 ounces of gold</p>
           <form action="/process_money" method="POST">
             {% csrf_token %}
             <input type="hidden" name="building" value="farm" />
@@ -86,7 +86,7 @@
 
         <div class="location">
           <h2>Cave</h2>
-          <p>(Earns 100-250 ounces of gold)</p>
+          <p>Earns 100-250 ounces of gold</p>
           <form action="/process_money" method="POST">
             {% csrf_token %}
             <input type="hidden" name="building" value="cave" />
@@ -104,7 +104,7 @@
 
         <div class="location">
           <h2>House</h2>
-          <p>(Earns 20-50 ounces of gold)</p>
+          <p>Earns 20-50 ounces of gold</p>
           <form action="/process_money" method="POST">
             {% csrf_token %}
             <input type="hidden" name="building" value="house" />

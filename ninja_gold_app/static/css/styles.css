@@ -26,7 +26,7 @@ body {
 }
 
 /* Links styling */
-/* .my-total {
+.my-total {
   font-size: 1em;
 }
 
@@ -44,7 +44,7 @@ body {
   margin-top: -15px;
   margin-bottom: 25px;
   font-size: 1em;
-} */
+}
 
 a {
   color: gold;

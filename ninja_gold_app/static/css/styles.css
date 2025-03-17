@@ -177,6 +177,10 @@ p {
     flex-direction: column;
   }
 
+  .my-total {
+    font-size: 1em;
+  }
+
   .loose {
     color: red;
     text-align: center;

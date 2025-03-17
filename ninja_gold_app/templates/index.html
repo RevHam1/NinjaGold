@@ -14,7 +14,7 @@
   </head>
   <body>
     <div id="container">
-      <h3>My Ninja Gold Total is {{request.session.gold}}</h3>
+      <h3 class="my-total">My Ninja Gold Total is {{request.session.gold}}</h3>
       {% if request.session.all_lost_conditions_met %}
       <p class="loose">
         You've been at the "Casinoi" too long. You "LOST" Take a break or Reset

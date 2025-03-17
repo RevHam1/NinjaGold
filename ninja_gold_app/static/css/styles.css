@@ -28,7 +28,6 @@ body {
 /* Links styling */
 .my-total {
   font-size: 1em;
-  padding: 0px 5px;
 }
 
 .loose {
@@ -177,6 +176,10 @@ p {
 
 @media (max-width: 480px) {
   /* Top Strea */
+  #container {
+    padding: 10px;
+  }
+
   .flex-div {
     display: flex;
     align-items: center;
@@ -186,6 +189,8 @@ p {
   .my-total {
     font-size: 1em;
     padding: 0px 5px;
+    min-width: 200px
+    white-space: nowrap;
   }
 
   .loose {

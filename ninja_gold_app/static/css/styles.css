@@ -187,7 +187,7 @@ p {
   }
 
   .my-total {
-    font-size: 1.5em;
+    font-size: 1.3em;
     padding: 0px 5px;
     min-width: 200px;
     white-space: nowrap;
@@ -210,23 +210,21 @@ p {
   }
 
   #container h3 {
-    font-size: 1em;
+    font-size: 1.3em;
   }
 
   img {
     width: 65px;
     height: auto;
-    margin-top: -15px;
-    margin-bottom: -15px;
+    margin-top: -16px;
+    margin-bottom: -16px;
   }
 
   a {
     font-size: 1.3em;
     padding: 0px 5px;
     color: gold;
-    /* text-shadow: 2px 2px 4px green; */
-    margin-bottom: -10px;
-    /* max-width: fit-content; */
+    margin-bottom: -12px;
     max-width: 100%;
     display: block; /* Makes the link take full width */
   }

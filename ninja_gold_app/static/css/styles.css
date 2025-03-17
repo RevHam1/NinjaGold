@@ -216,8 +216,8 @@ p {
   img {
     width: 65px;
     height: auto;
-    margin-top: -12px;
-    margin-bottom: -12px;
+    margin-top: -15px;
+    margin-bottom: -15px;
   }
 
   a {
@@ -225,7 +225,7 @@ p {
     padding: 0px 5px;
     color: gold;
     /* text-shadow: 2px 2px 4px green; */
-    margin-bottom: -5px;
+    margin-bottom: -10px;
     /* max-width: fit-content; */
     max-width: 100%;
     display: block; /* Makes the link take full width */
@@ -244,12 +244,12 @@ p {
     max-width: 260px;
     padding: 12px;
     padding-bottom: 5px;
-    display: flex; /* Makes it flexible */
-    flex-direction: row; /* Default direction is column */
+    display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
     /* align-items: flex-start; */
     justify-content: center;
-    margin-bottom: -18px;
+    margin-bottom: -20px;
   }
 
   h2 {

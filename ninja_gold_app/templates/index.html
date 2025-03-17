@@ -16,28 +16,12 @@
     <div id="container">
       <h3>My Ninja Gold Total is {{request.session.gold}}</h3>
       {% if request.session.all_lost_conditions_met %}
-      <p
-        style="
-          color: red;
-          text-align: center;
-          margin-top: -15px;
-          margin-bottom: 25px;
-          font-size: x-large;
-        "
-      >
-        You've been at the "Casinoi" too long. You "LOST" Take a break or Reset
-        Gold.
+      <p class="loose">
+        > You've been at the "Casinoi" too long. You "LOST" Take a break or
+        Reset Gold.
       </p>
       {% elif request.session.win_condition_met %}
-      <p
-        style="
-          color: gold;
-          text-align: center;
-          margin-top: -15px;
-          margin-bottom: 25px;
-          font-size: xx-large;
-        "
-      >
+      <p class="win">
         Congratulations! You've reached the maximum Casino visits and secured a
         "BIG WIN!"
       </p>

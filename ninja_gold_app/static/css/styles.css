@@ -161,8 +161,24 @@ p {
     flex-direction: column;
   }
 
+  .loose {
+    color: red;
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: 25px;
+    font-size: x-large;
+  }
+
+  .win {
+    color: gold;
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: 25px;
+    font-size: x-large;
+  }
+
   #container h3 {
-    font-size: 1em !important;
+    font-size: 1.3em !important;
   }
 
   img {

@@ -26,6 +26,10 @@ body {
 }
 
 /* Links styling */
+.my-total {
+  font-size: 1em;
+}
+
 .loose {
   color: red;
   text-align: center;

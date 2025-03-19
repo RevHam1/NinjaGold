@@ -27,7 +27,7 @@ body {
 
 /* Links styling */
 .my-total {
-  font-size: 1.5em;
+  font-size: 2em;
 }
 
 .loose {
@@ -35,7 +35,7 @@ body {
   text-align: center;
   margin-top: -15px;
   margin-bottom: 25px;
-  font-size: 1em;
+  font-size: 1.7em;
 }
 
 .win {
@@ -43,21 +43,21 @@ body {
   text-align: center;
   margin-top: -15px;
   margin-bottom: 25px;
-  font-size: 1em;
+  font-size: 2em;
 }
 
 a {
   color: gold;
-  font-size: 20px;
+  font-size: 30px;
   text-decoration: none;
   display: inline-block;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 img {
   width: 100px;
   height: auto;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 /* Use flex for location cards */
@@ -96,12 +96,13 @@ h3 {
 p {
   margin-top: 15px;
   line-height: 1.5em;
-  font-size: 0.85em;
+  font-size: 1em;
 }
 
 /* Gold button */
 .gold {
-  margin-top: 15px;
+  margin-top: 5px;
+  margin-bottom: -20px;
   background-color: gold;
   font-size: 15px;
   padding: 10px 15px;
@@ -117,9 +118,18 @@ p {
 
 .note {
   color: white;
-  margin-bottom: 25px;
+  margin-top: -5px;
+  margin-bottom: 15px;
   text-align: center;
-  font-size: larger;
+  font-size: 24px;
+}
+
+.until {
+  /* margin: 0px 30px; */
+  margin-top: 0px;
+  margin-bottom: -3px;
+  font-size: 0.9em;
+  font-weight: bold;
 }
 
 /* Activity log */
@@ -283,7 +293,7 @@ p {
     width: 65px;
     height: auto;
     margin-top: -16px;
-    margin-bottom: -16px;
+    margin-bottom: 5px;
   }
 
   a {

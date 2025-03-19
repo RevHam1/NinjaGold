@@ -1,11 +1,17 @@
+import os
 import random
 
+import pygame  # Ensure pygame is installed or remove sound functionality if not needed
 from django.shortcuts import HttpResponse, redirect, render
+
+pygame.init()
+pygame.mixer.init()
 
 
 def index(request):
     if 'gold' not in request.session:
         request.session['gold'] = 0
+        print(f"Current gold in session: {request.session.get('gold')}")
     if 'activites' not in request.session:
         request.session['activites'] = []
     if 'used_buildings' not in request.session:
@@ -13,173 +19,404 @@ def index(request):
     return render(request, 'index.html')
 
 
+# views.py
+
+
 # def process_money(request):
 #     print("The form has been submitted!")
 #     print(request.POST)
-#     building = request.POST['building']
 
-#     if building in request.session['used_buildings']:
-#         request.session['activites'].append(
-#             f"You have already used the {building.capitalize()}! Choose another building.")
+#     building = request.POST.get('building')  # Safely get the building value
+
+#     # Initialize session variables if they don't exist
+#     if 'used_buildings' not in request.session:
+#         request.session['used_buildings'] = []
+#     if 'casino_visits' not in request.session:
+#         request.session['casino_visits'] = 0
+#     if 'activites' not in request.session:
+#         request.session['activites'] = []
+#     if 'gold' not in request.session:
+#         request.session['gold'] = 0
+
+#     # Prevent processing if the building has already been used (except Casino)
+#     if building in request.session['used_buildings'] and building != 'casino':
+#         request.session.modified = True
 #         return redirect('/')
 
-#     if building == 'farm':
-#         num = random.randint(10, 20)
-#         request.session['gold'] += num
-#         request.session['activites'].append(
-#             f"You Found {num} ounces of Gold on a Farm! Yay!")
+#     # Handle special Casino cases
+#     if building == 'casino':
+#         if request.session['casino_visits'] >= 15:
+#             request.session['activites'].append(
+#                 "You have reached the maximum number of Casino visits (15). Take the GOLD and Run!"
+#             )
+#             request.session.modified = True
+#             return redirect('/')
+#         if request.session['gold'] <= 0:
+#             request.session['activites'].append(
+#                 "No Gold! No Casino! Search another area."
+#             )
+#             request.session.modified = True
+#             return redirect('/')
 
-#     elif building == 'cave':
-#         num = random.randint(5, 10)
-#         request.session['gold'] += num
-#         request.session['activites'].append(
-#             f"You Discovered {num} ounces of Gold in a Cave! Yay!")
+#     # Define logic for each building
+#     building_logic = {
+#         'farm': {'min_gold': 50, 'max_gold': 100, 'message': "You Found {gold} ounces of Gold on a Farm!"},
+#         'cave': {'min_gold': 100, 'max_gold': 250, 'message': "You Found {gold} ounces of Gold in a Cave!"},
+#         'house': {'min_gold': 20, 'max_gold': 50, 'message': "You Stole {gold} ounces of Gold from a House!"},
+#         'casino': {'min_gold': -50, 'max_gold': 50}
+#     }
 
-#     elif building == 'house':
-#         num = random.randint(2, 5)
-#         request.session['gold'] += num
+#     if building in building_logic and building != 'casino':
+#         # Handle Farm, Cave, and House
+#         gold = random.randint(
+#             building_logic[building]['min_gold'], building_logic[building]['max_gold'])
+#         request.session['gold'] += gold
+#         request.session['used_buildings'].append(building)
 #         request.session['activites'].append(
-#             f"You Stolen {num} ounces of Gold from a House! Yay!")
+#             building_logic[building]['message'].format(gold=gold))
 
 #     elif building == 'casino':
-#         # Customizing probability for losing or winning
-#         num = random.choices(
-#             population=[random.randint(-50, -1), random.randint(1, 50), 0],
-#             # 60% chance to lose, 30% to win, 10% to earn nothing
-#             weights=[60, 30, 10],
-#             k=1
-#         )[0]  # random.choices returns a list, so extract the first element
-
-#         request.session['gold'] += num
-#         if num > 0:
+#         # Casino-specific logic
+#         request.session['casino_visits'] += 1
+#         gold = random.randint(-50, 50)
+#         request.session['gold'] += gold
+#         if gold > 0:
 #             request.session['activites'].append(
-#                 f"You Won {num} ounces of Gold at the Casino! Yay!")
-#         elif num == 0:
+#                 f"You Won {gold} ounces of Gold at the Casino! Yay!")
+#         elif gold == 0:
 #             request.session['activites'].append(
 #                 "You Won nothing at the Casino. Oh Well...")
 #         else:
 #             request.session['activites'].append(
-#                 f"You Lost {abs(num)} ounces of Gold at the Casino! Boooo!!")
+#                 f"You Lost {abs(gold)} ounces of Gold at the Casino! Boooo!")
 
-#     # elif building == 'casino':
-#     #     num = random.randint(-50, 50)
-#     #     request.session['gold'] += num
-#     #     if num > 0:
-#     #         request.session['activites'].append(
-#     #             f"You Won {num} ounces of Gold at the Casino! Yay!")
-#     #     elif num == 0:
-#     #         request.session['activites'].append("You earned nothing")
-#     #     else:
-#     #         request.session['activites'].append(
-#     #             f"You Lost {abs(num)} ounces of Gold at the Casino! Boooo!!")
+#     # Check "lose" or "win" conditions
+#     farm_used = 'farm' in request.session['used_buildings']
+#     cave_used = 'cave' in request.session['used_buildings']
+#     house_used = 'house' in request.session['used_buildings']
+#     negative_gold = request.session['gold'] < 0
+#     max_casino_visits_reached = request.session['casino_visits'] >= 15
 
-#     # Mark the building as used
-#     request.session['used_buildings'].append(building)
-#     request.session.modified = True  # Ensure session is saved
+#     request.session['all_lost_conditions_met'] = (
+#         farm_used and cave_used and house_used and negative_gold
+#     )
+#     request.session['win_condition_met'] = max_casino_visits_reached
+
+#     # Save session updates
+#     request.session.modified = True
 
 #     return redirect('/')
+
+
+def ninja_gold_game(request):
+    # Define building descriptions
+    building_descriptions = {
+        'farm': {
+            'name': 'Farm',
+            'earn_message': 'Earns 50-100 ounces of gold',
+            'visited_message': "You've searched on a Farm.",
+        },
+        'cave': {
+            'name': 'Cave',
+            'earn_message': 'Earns 100-250 ounces of gold',
+            'visited_message': "You've searched in a Cave.",
+        },
+        'house': {
+            'name': 'House',
+            'earn_message': 'Earns 20-50 ounces of gold',
+            'visited_message': "You stole from a House.",
+        },
+        'casino': {
+            'name': 'Casino',
+            'earn_message': 'Earn/lose 0-50 ounces of gold',
+            'visited_message': "You've been to the Casino.",
+        }
+    }
+
+    # Initialize session variables if they don't exist
+    if 'gold' not in request.session:
+        request.session['gold'] = 0
+    if 'activities' not in request.session:
+        request.session['activities'] = []
+    if 'visited_buildings' not in request.session:
+        request.session['visited_buildings'] = []
+
+    return render(request, 'ninja_gold.html', {
+        'building_descriptions': building_descriptions
+    })
+
 
 def process_money(request):
     print("The form has been submitted!")
     print(request.POST)
-    building = request.POST['building']
+    building = request.POST.get('building')  # Safely get the building value
 
-    # Initialize 'used_buildings' in the session if it doesn't exist
+    # Initialize session variables if they don't exist
     if 'used_buildings' not in request.session:
         request.session['used_buildings'] = []
-
-    # Initialize casino visit counter in the session if it doesn't exist
     if 'casino_visits' not in request.session:
         request.session['casino_visits'] = 0
+    if 'activites' not in request.session:
+        request.session['activites'] = []
+    if 'gold' not in request.session:
+        request.session['gold'] = 0
+    if 'visited_buildings' not in request.session:  # Stores clicked buildings
+        request.session['visited_buildings'] = []
 
-    # Check if the building has already been used
+    # Prevent processing if the building has already been used (except Casino)
     if building in request.session['used_buildings'] and building != 'casino':
-        # Skip processing without appending any message to activities for non-casino buildings
         request.session.modified = True
         return redirect('/')
 
-    # Check if the user exceeds 7 casino visits
-    if building == 'casino' and request.session['casino_visits'] >= 15:
-        request.session['activites'].append(
-            "You have reached the maximum number of Casino visits (15). Take the GOLD and Run!"
-        )
-        request.session.modified = True
-        return redirect('/')
+    # Handle special Casino cases
+    if building == 'casino':
+        if request.session['casino_visits'] >= 15:
+            request.session['activites'].append(
+                "You have reached the maximum number of Casino visits (15). Take the GOLD and Run!"
+            )
+            request.session.modified = True
+            return redirect('/')
+        if request.session['gold'] <= 0:
+            request.session['activites'].append(
+                "No Gold! No Casino! Search another area."
+            )
+            request.session.modified = True
+            return redirect('/')
 
-    # Check if the building is 'casino' and the user has no gold
-    if building == 'casino' and request.session.get('gold', 0) <= 0:
-        # Add a message to activities instead of processing the casino
-        request.session['activites'].append(
-            "No Gold! No Casino! Search another area."
-        )
-        request.session.modified = True
-        return redirect('/')
+    # Building-specific logic
+    building_logic = {
+        'farm': {
+            'min_gold': 50,
+            'max_gold': 100,
+            'message': "You Found {gold} ounces of Gold on a Farm! Yay!",
+            'sound': 'static/sounds/farm.wav'
+        },
+        'cave': {
+            'min_gold': 100,
+            'max_gold': 250,
+            'message': "You Found {gold} ounces of Gold in a Cave! Yay!",
+            'sound': 'static/sounds/cave.wav'
+        },
+        'house': {
+            'min_gold': 20,
+            'max_gold': 50,
+            'message': "You Stole {gold} ounces of Gold from a House! Yay!",
+            'sound': 'static/sounds/house.wav'
+        },
+        'casino': {
+            'min_gold': -50,
+            'max_gold': 50,
+            'message_win': "You Won {gold} ounces of Gold at the Casino! Yay!",
+            'message_loss': "You Lost {gold} ounces of Gold at the Casino! Boooo!!",
+            'message_neutral': "You Won nothing at the Casino. Oh Well...",
+            'sound_win': 'static/sounds/win.wav',
+            'sound_loss': 'static/sounds/loss.wav',
+            'sound_neutral': 'static/sounds/ohwell.wav'
+        }
+    }
 
-    # Regular building logic
-    if building == 'farm':
-        num = random.randint(50, 100)
-        request.session['gold'] += num
-        request.session['used_buildings'].append('farm')  # Mark as used
+    if building in building_logic and building != 'casino':
+        # Handle Farm, Cave, and House
+        gold = random.randint(
+            building_logic[building]['min_gold'], building_logic[building]['max_gold'])
+        request.session['gold'] += gold
+        request.session['used_buildings'].append(building)
         request.session['activites'].append(
-            f"You Found {num} ounces of Gold on a Farm! Yay!"
-        )
+            building_logic[building]['message'].format(gold=gold))
 
-    elif building == 'cave':
-        num = random.randint(100, 250)
-        request.session['gold'] += num
-        request.session['used_buildings'].append('cave')  # Mark as used
-        request.session['activites'].append(
-            f"You Found {num} ounces of Gold in a Cave! Yay!"
-        )
+        # Store visited buildings for persistent messages
+        if building not in request.session['visited_buildings']:
+            request.session['visited_buildings'].append(building)
 
-    elif building == 'house':
-        num = random.randint(20, 50)
-        request.session['gold'] += num
-        request.session['used_buildings'].append('house')  # Mark as used
-        request.session['activites'].append(
-            f"You Stole {num} ounces of Gold from a House! Yay!"
-        )
+        # Play the respective sound
+        try:
+            pygame.mixer.Sound(building_logic[building]['sound']).play()
+        except Exception as e:
+            print(f"Error playing sound for {building}: {e}")
 
     elif building == 'casino':
-        # Increment the casino visit counter
+        # Casino-specific logic
         request.session['casino_visits'] += 1
-
-        # Process the casino logic
-        num = random.choices(
+        gold = random.choices(
             population=[random.randint(-50, -1), random.randint(1, 50), 0],
-            # 70% chance to lose, 20% chance to win, 10% nothing
-            weights=[85, 10, 5],
+            weights=[85, 10, 5],  # 85% lose, 10% win, 5% nothing
             k=1
-        )[0]  # Extract the random number result
-
-        request.session['gold'] += num
-        if num > 0:
+        )[0]
+        request.session['gold'] += gold
+        if gold > 0:
             request.session['activites'].append(
-                f"You Won {num} ounces of Gold at the Casino! Yay!"
-            )
-        elif num == 0:
+                building_logic['casino']['message_win'].format(gold=gold))
+            try:
+                pygame.mixer.Sound(
+                    building_logic['casino']['sound_win']).play()
+            except Exception as e:
+                print(f"Error playing casino win sound: {e}")
+        elif gold == 0:
             request.session['activites'].append(
-                "You Won nothing at the Casino. Oh Well..."
-            )
+                building_logic['casino']['message_neutral'])
+            try:
+                pygame.mixer.Sound(
+                    building_logic['casino']['sound_neutral']).play()
+            except Exception as e:
+                print(f"Error playing casino neutral sound: {e}")
         else:
             request.session['activites'].append(
-                f"You Lost {abs(num)} ounces of Gold at the Casino! Boooo!!"
-            )
+                building_logic['casino']['message_loss'].format(gold=abs(gold)))
+            try:
+                pygame.mixer.Sound(
+                    building_logic['casino']['sound_loss']).play()
+            except Exception as e:
+                print(f"Error playing casino loss sound: {e}")
 
-    # Check if all conditions are met
+    # Check if all conditions for "loss" are met
     farm_used = 'farm' in request.session['used_buildings']
     cave_used = 'cave' in request.session['used_buildings']
     house_used = 'house' in request.session['used_buildings']
     negative_gold = request.session['gold'] < 0
-    max_casino_visits_reached = request.session.get('casino_visits', 0) >= 15
+    max_casino_visits_reached = request.session['casino_visits'] >= 15
 
-    # Store the result in a session variable
-    request.session['all_lost_conditions_met'] = farm_used and cave_used and house_used and negative_gold
+    request.session['all_lost_conditions_met'] = (
+        farm_used and cave_used and house_used and negative_gold
+    )
     request.session['win_condition_met'] = max_casino_visits_reached
 
-    # Ensure session updates are saved
+    # Save session updates
     request.session.modified = True
+
     return redirect('/')
+
+
+# def process_money(request):
+#     print("The form has been submitted!")
+#     print(request.POST)
+#     building = request.POST.get('building')  # Safely get the building value
+
+#     # Initialize session variables if they don't exist
+#     if 'used_buildings' not in request.session:
+#         request.session['used_buildings'] = []
+#     if 'casino_visits' not in request.session:
+#         request.session['casino_visits'] = 0
+#     if 'activites' not in request.session:
+#         request.session['activites'] = []
+#     if 'gold' not in request.session:
+#         request.session['gold'] = 0
+
+#     # Prevent processing if the building has already been used (except Casino)
+#     if building in request.session['used_buildings'] and building != 'casino':
+#         request.session.modified = True
+#         return redirect('/')
+
+#     # Handle special Casino cases
+#     if building == 'casino':
+#         if request.session['casino_visits'] >= 15:
+#             request.session['activites'].append(
+#                 "You have reached the maximum number of Casino visits (15). Take the GOLD and Run!"
+#             )
+#             request.session.modified = True
+#             return redirect('/')
+#         if request.session['gold'] <= 0:
+#             request.session['activites'].append(
+#                 "No Gold! No Casino! Search another area."
+#             )
+#             request.session.modified = True
+#             return redirect('/')
+
+#     # Building-specific logic
+#     building_logic = {
+#         'farm': {
+#             'min_gold': 50,
+#             'max_gold': 100,
+#             'message': "You Found {gold} ounces of Gold on a Farm! Yay!",
+#             'sound': 'static/sounds/farm.wav'
+#         },
+#         'cave': {
+#             'min_gold': 100,
+#             'max_gold': 250,
+#             'message': "You Found {gold} ounces of Gold in a Cave! Yay!",
+#             'sound': 'static/sounds/cave.wav'
+#         },
+#         'house': {
+#             'min_gold': 20,
+#             'max_gold': 50,
+#             'message': "You Stole {gold} ounces of Gold from a House! Yay!",
+#             'sound': 'static/sounds/house.wav'
+#         },
+#         'casino': {
+#             'min_gold': -50,
+#             'max_gold': 50,
+#             'message_win': "You Won {gold} ounces of Gold at the Casino! Yay!",
+#             'message_loss': "You Lost {gold} ounces of Gold at the Casino! Boooo!!",
+#             'message_neutral': "You Won nothing at the Casino. Oh Well...",
+#             'sound_win': 'static/sounds/win.wav',
+#             'sound_loss': 'static/sounds/loss.wav',
+#             'sound_neutral': 'static/sounds/ohwell.wav'
+#         }
+#     }
+
+#     if building in building_logic and building != 'casino':
+#         # Handle Farm, Cave, and House
+#         gold = random.randint(
+#             building_logic[building]['min_gold'], building_logic[building]['max_gold'])
+#         request.session['gold'] += gold
+#         request.session['used_buildings'].append(building)
+#         request.session['activites'].append(
+#             building_logic[building]['message'].format(gold=gold))
+#         # Play the respective sound
+#         try:
+#             pygame.mixer.Sound(building_logic[building]['sound']).play()
+#         except Exception as e:
+#             print(f"Error playing sound for {building}: {e}")
+
+#     elif building == 'casino':
+#         # Casino-specific logic
+#         request.session['casino_visits'] += 1
+#         gold = random.choices(
+#             population=[random.randint(-50, -1), random.randint(1, 50), 0],
+#             weights=[85, 10, 5],  # 85% lose, 10% win, 5% nothing
+#             k=1
+#         )[0]
+#         request.session['gold'] += gold
+#         if gold > 0:
+#             request.session['activites'].append(
+#                 building_logic['casino']['message_win'].format(gold=gold))
+#             try:
+#                 pygame.mixer.Sound(
+#                     building_logic['casino']['sound_win']).play()
+#             except Exception as e:
+#                 print(f"Error playing casino win sound: {e}")
+#         elif gold == 0:
+#             request.session['activites'].append(
+#                 building_logic['casino']['message_neutral'])
+#             try:
+#                 pygame.mixer.Sound(
+#                     building_logic['casino']['sound_neutral']).play()
+#             except Exception as e:
+#                 print(f"Error playing casino neutral sound: {e}")
+#         else:
+#             request.session['activites'].append(
+#                 building_logic['casino']['message_loss'].format(gold=abs(gold)))
+#             try:
+#                 pygame.mixer.Sound(
+#                     building_logic['casino']['sound_loss']).play()
+#             except Exception as e:
+#                 print(f"Error playing casino loss sound: {e}")
+
+#     # Check if all conditions for "loss" are met
+#     farm_used = 'farm' in request.session['used_buildings']
+#     cave_used = 'cave' in request.session['used_buildings']
+#     house_used = 'house' in request.session['used_buildings']
+#     negative_gold = request.session['gold'] < 0
+#     max_casino_visits_reached = request.session['casino_visits'] >= 15
+
+#     request.session['all_lost_conditions_met'] = (
+#         farm_used and cave_used and house_used and negative_gold
+#     )
+#     request.session['win_condition_met'] = max_casino_visits_reached
+
+#     # Save session updates
+#     request.session.modified = True
+
+#     return redirect('/')
 
 
 def reset(request):

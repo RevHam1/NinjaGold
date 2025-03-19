@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% load static %}
+    
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <link rel="icon" href="{% static 'favicon.ico' %}" />
     <title>Ninja Gold</title>
@@ -17,7 +18,7 @@
       <h3 class="my-total">My Ninja Gold Total is {{request.session.gold}}</h3>
       {% if request.session.all_lost_conditions_met %}
       <p class="loose">
-        You've been at the "Casinoi" too long. You "LOST" Take a break or Reset
+        You've been at the "Casino" too long. You "LOST" Take a break or Reset
         Gold.
       </p>
       {% elif request.session.win_condition_met %}
@@ -55,134 +56,196 @@
       {% endif %}
       <div class="flex-div">
         <div style="text-align: center">
-          <img src="{% static 'images/gold_ninja.jpg' %}" alt="Gold Ninja" />
+          <img id="gold-ninja" src="{% static 'images/gold_ninja.jpg' %}" alt="Gold Ninja" />
         </div>
         <a href="/reset">Reset Gold</a>
         <br />
         <p class="note">
-          Find Gold in each area below and see your Gold grow. But be careful at
-          the Casino...
+          Find Gold in each area below and see your Gold grow. But be careful at the Casino...
         </p>
       </div>
 
       <div class="location-container">
+        <!-- Farm -->
         <div class="location">
           <h2>Farm</h2>
           <p>Earns 50-100 ounces of gold</p>
-          <form action="/process_money" method="POST">
+          <form
+            action="/process_money"
+            method="POST"
+            onsubmit="handleBuildingClick('farm', event)"
+          >
             {% csrf_token %}
             <input type="hidden" name="building" value="farm" />
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
           {% if 'farm' in request.session.used_buildings %}
-          <p
-            class="been"
-            style="
-              color: red;
-              font-size: small;
-              margin: 0px 20px;
-              font-weight: bold;
-            "
-          >
-            You've searched on a Farm.
-          </p>
+          <p style="color: red;">You've Searched on a Farm.</p>
           {% endif %}
         </div>
-
+      
+        <!-- Cave -->
         <div class="location">
           <h2>Cave</h2>
           <p>Earns 100-250 ounces of gold</p>
-          <form action="/process_money" method="POST">
+          <form
+            action="/process_money"
+            method="POST"
+            onsubmit="handleBuildingClick('cave', event)"
+          >
             {% csrf_token %}
             <input type="hidden" name="building" value="cave" />
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
           {% if 'cave' in request.session.used_buildings %}
-          <p
-            class="been"
-            style="
-              color: red;
-              font-size: small;
-              margin: 0px 30px;
-              font-weight: bold;
-            "
-          >
-            You've searched in a Cave.
-          </p>
+          <p style="color: red;">You Discovered in a Cave.</p>
           {% endif %}
         </div>
-
+      
+        <!-- House -->
         <div class="location">
           <h2>House</h2>
           <p>Earns 20-50 ounces of gold</p>
-          <form action="/process_money" method="POST">
+          <form
+            action="/process_money"
+            method="POST"
+            onsubmit="handleBuildingClick('house', event)"
+          >
             {% csrf_token %}
             <input type="hidden" name="building" value="house" />
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
-          {% if 'house' in request.session.used_buildings %}
-          <p
-            style="
-              color: red;
-              font-size: small;
-              margin: 0px 30px;
-              font-weight: bold;
-            "
-          >
-            You stolen from a House.
-          </p>
+          {% if 'cave' in request.session.used_buildings %}
+          <p style="color: red;">You Stolen from a House.</p>
           {% endif %}
         </div>
-
+      
+        <!-- Casino -->
         <div class="location">
           <h2>Casino</h2>
-          {% if request.session.gold > 0 %}
-          <p>Earn/lose 0-50 Gold ounces</p>
-          <form action="/process_money" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="building" value="casino" />
-            <input class="gold" type="submit" value="Find Gold!" />
-          </form>
-          <p class="until">Find Gold Until...</p>
-          {% if 'casino' in request.session.used_buildings %}
-          <p
-            class="been"
-            style="color: red; font-size: medium; font-weight: bold"
-          >
-            You've been to the Casino.
-          </p>
-          {% endif %}
-          <!-- space -->
+          {% if request.session.gold < 1 %}
+            <h6 style="color: red; font-size: medium; text-align: center">
+              No Gold! No Casino!
+              <form action="/process_money" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="building" value="casino" />
+                <input class="gold" type="submit" value="Need Gold!" />
+              </form>
+            </h6>
           {% else %}
-          <h6 style="color: red; font-size: medium; text-align: center">
-            No Gold! No Casino!
-            <input class="gold" type="submit" value="Need Gold!" />
-          </h6>
+            <p>Earn/lose 0-50 Gold ounces</p>
+            <form
+              action="/process_money"
+              method="POST"
+              onsubmit="handleBuildingClick('casino', event)"
+            >
+              {% csrf_token %}
+              <input type="hidden" name="building" value="casino" />
+              <input class="gold" type="submit" value="Play UNTIL" />
+            </form>
+           
+          
           {% endif %}
         </div>
+      
       </div>
+  
+          <h4>Activities</h4>
 
-      <!-- <p class="note"
-        style="
-          color: white;
-          margin-bottom: 25px;
-          text-align: center;
-          font-size: larger;
-        "
-      >
-        Find Gold in each area above and see your Gold grow. But be careful at
-        the Casino...
-      </p> -->
+          <div class="activity">
+            {%for activity in request.session.activites%} {%if "Yay" in activity%}
+            <p class="green">{{activity}}</p>
+            {% else %}
+            <p class="red">{{activity}}</p>
+            {% endif %} {% endfor %}
+          </div>
+        </div>
 
-      <h4>Activities</h4>
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const img = document.getElementById('gold-ninja');
+            const audio = new Audio('{% static "sounds/ninjagold.wav" %}');
+            audio.loop = true; // Enables continuous looping
 
-      <div class="activity">
-        {%for activity in request.session.activites%} {%if "Yay" in activity%}
-        <p class="green">{{activity}}</p>
-        {% else %}
-        <p class="red">{{activity}}</p>
-        {% endif %} {% endfor %}
-      </div>
+            // Auto Start code below
+            try {
+              audio.play();
+            } catch (err) {
+              console.warn('Autoplay might be blocked by the browser', err);
+            }
+            // Auto Start code above
+
+            let isPlaying = false;
+        
+            img.addEventListener('click', () => {
+              if (isPlaying) {
+                audio.pause();
+                audio.currentTime = 0; // Reset to the start
+              } else {
+                audio.play();
+              }
+              isPlaying = !isPlaying;
+            });
+          });
+        </script>
+        
+      <!-- <script>
+        // Initialize the toggle state for sound
+        let soundEnabled = true;
+      
+        // Keep track of clicked buildings
+        const clickedBuildings = new Set();
+      
+        // Function to toggle the sound on/off
+        function toggleSound() {
+          soundEnabled = !soundEnabled;
+          const toggleButton = document.getElementById("sound-toggle");
+          toggleButton.textContent = soundEnabled ? "Sound: On" : "Sound: Off";
+        }
+        
+        function handleBuildingClick(building, event) {
+          // Prevent the form from submitting the traditional way
+          event.preventDefault();
+      
+          // Play the sound file
+          const sound = new Audio(`/static/sounds/${building}.wav`);
+          sound.play();
+
+          
+      </script> -->
+
+
+
+      <!-- <script>
+        let soundEnabled = true;
+        const clickedBuildings = new Set();
+      
+        function toggleSound() {
+          soundEnabled = !soundEnabled;
+          document.getElementById("sound-toggle").textContent = soundEnabled ? "Sound: On" : "Sound: Off";
+        }
+      
+        function handleBuildingClick(building, event) {
+          event.preventDefault();
+          
+          const sound = new Audio(`/static/sounds/${building}.wav`);
+          const form = event.target;
+      
+          if (soundEnabled) {
+            sound.play().then(() => form.submit());
+          } else {
+            form.submit();
+          }
+      
+          // Show message only once
+          if (!clickedBuildings.has(building)) {
+            clickedBuildings.add(building);
+            document.getElementById(`${building}-message`).style.display = "block";
+          }
+        }
+      </script> -->
+`
+
     </div>
   </body>
 </html>

@@ -330,12 +330,7 @@
             const ninjaGoldAudio = new Audio('{% static "sounds/ninjagold.wav" %}');
             ninjaGoldAudio.loop = true; // Enable continuous looping
           
-            // Automatically play ninjagold.wav on page load
-            try {
-              ninjaGoldAudio.play();
-            } catch (err) {
-              console.warn('Autoplay might be blocked by the browser', err);
-            }
+            
           
             let isNinjaGoldPlaying = false;
           

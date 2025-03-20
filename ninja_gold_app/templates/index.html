@@ -161,7 +161,366 @@
           </div>
         </div>
 
+        <!-- <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const ninjaGoldAudio = new Audio('{% static "sounds/ninjagold.wav" %}');
+            ninjaGoldAudio.loop = true;
+        
+            // Auto Start the background music
+            try {
+              ninjaGoldAudio.play();
+            } catch (err) {
+              console.warn('Autoplay might be blocked by the browser', err);
+            }
+        
+            let isNinjaGoldPlaying = true;
+        
+            const img = document.getElementById('gold-ninja');
+            img.addEventListener('click', () => {
+              if (isNinjaGoldPlaying) {
+                ninjaGoldAudio.pause();
+                ninjaGoldAudio.currentTime = 0;
+              } else {
+                ninjaGoldAudio.play();
+              }
+              isNinjaGoldPlaying = !isNinjaGoldPlaying;
+            });
+        
+            // Store clicked buildings in sessionStorage
+            const clickedBuildings = JSON.parse(sessionStorage.getItem('clickedBuildings')) || [];
+        
+            // Retrieve the correct casino sound from Django session
+            const casinoResult = "{{ request.session.sound_to_play }}"; 
+        
+            document.addEventListener('DOMContentLoaded', () => {
+              const soundToPlay = "{{ request.session.sound_to_play|escapejs }}";
+              
+              if (soundToPlay) {
+                  const audio = new Audio('/' + soundToPlay);
+                  console.log("Playing sound:", soundToPlay);
+          
+                  audio.play().then(() => {
+                      console.log("Sound played successfully.");
+                      setTimeout(() => {
+                          window.location.reload();
+                      }, 2000);  // 2-second delay before refresh
+                  }).catch(err => {
+                      console.warn("Error playing sound:", err);
+                      window.location.reload(); // Refresh anyway if sound fails
+                  });
+              }
+          });
+          
+        
+            document.querySelectorAll('.location form').forEach(form => {
+              const building = form.querySelector('input[name="building"]').value;
+              form.addEventListener('submit', event => handleBuildingClick(event, building));
+            });
+          });
+        </script> -->
+        
+
+        <!-- <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            // Set to track which buildings have been clicked
+            const clickedBuildings = new Set();
+          
+            // Ninjagold.wav for the gold-ninja image
+            const ninjaGoldAudio = new Audio('{% static "sounds/ninjagold.wav" %}');
+            ninjaGoldAudio.loop = true; // Enable continuous looping
+          
+            // Auto Start ninjagold.wav
+            try {
+              ninjaGoldAudio.play();
+            } catch (err) {
+              console.warn('Autoplay might be blocked by the browser', err);
+            }
+          
+            let isNinjaGoldPlaying = false;
+          
+            // Handle ninjagold.wav play/pause functionality on image click
+            const img = document.getElementById('gold-ninja');
+            img.addEventListener('click', () => {
+              if (isNinjaGoldPlaying) {
+                ninjaGoldAudio.pause();
+                ninjaGoldAudio.currentTime = 0; // Reset to the start
+              } else {
+                ninjaGoldAudio.play();
+              }
+              isNinjaGoldPlaying = !isNinjaGoldPlaying;
+            });
+          
+            // Function to handle building clicks
+            function handleBuildingClick(building, event) {
+              event.preventDefault(); // Prevent default form submission
+          
+              let soundPath;
+          
+              // Check if the building was already clicked
+              if (clickedBuildings.has(building)) {
+                // Play ohwell.wav for subsequent clicks
+                soundPath = `/static/sounds/ohwell.wav`;
+              } else {
+                // Play the specific sound for the building the first time
+                soundPath = `/static/sounds/${building}.wav`;
+                clickedBuildings.add(building); // Mark the building as clicked
+              }
+          
+              // Play the determined sound
+              const sound = new Audio(soundPath);
+              sound.play().then(() => {
+                // Submit the form after the sound finishes playing (optional)
+                event.target.submit();
+              }).catch(err => {
+                console.warn(`Error playing sound for ${building}:`, err);
+                event.target.submit(); // Submit immediately if sound fails
+              });
+            }
+          
+            // Reset clicked buildings on "Reset Gold" link click
+            const resetLink = document.querySelector('a[href="/reset"]');
+            if (resetLink) {
+              resetLink.addEventListener('click', () => {
+                clickedBuildings.clear(); // Reset the state
+                console.log('Reset performed. All buildings reset for sound playback.');
+              });
+            }
+          
+            // Attach the handleBuildingClick function to each building's form
+            document.querySelectorAll('form').forEach(form => {
+              const buildingInput = form.querySelector('input[name="building"]');
+              if (buildingInput) {
+                const building = buildingInput.value;
+            
+                console.log(`Building to track: ${building}`); // Debug log
+            
+                form.addEventListener('submit', (event) => {
+                  event.preventDefault();
+            
+                  if (clickedBuildings.has(building)) {
+                    console.log(`${building} already clicked. Playing ohwell.wav.`);
+                    const sound = new Audio('/static/sounds/ohwell.wav');
+                    sound.play().then(() => form.submit());
+                  } else {
+                    console.log(`Adding ${building} to clickedBuildings.`);
+                    clickedBuildings.add(building);
+                    const sound = new Audio(`/static/sounds/${building}.wav`);
+                    sound.play().then(() => form.submit());
+                  }
+                });
+              } else {
+                console.warn("Building input not found in this form.");
+              }
+            });
+            
+          });
+          
+        </script> -->
+
+        <!-- // Not this one and Above -->
         <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            // Keep track of clicked buildings to avoid replaying sounds
+            const clickedBuildings = new Set();
+          
+            // Retrieve the sound file path from the backend for dynamic audio
+            const soundToPlay = "{{ request.session.sound_to_play|escapejs }}";
+          
+            // Ninjagold.wav audio for the gold-ninja image
+            const ninjaGoldAudio = new Audio('{% static "sounds/ninjagold.wav" %}');
+            ninjaGoldAudio.loop = true; // Enable continuous looping
+          
+            // Automatically play ninjagold.wav on page load
+            try {
+              ninjaGoldAudio.play();
+            } catch (err) {
+              console.warn('Autoplay might be blocked by the browser', err);
+            }
+          
+            let isNinjaGoldPlaying = false;
+          
+            // Handle ninjagold.wav play/pause functionality on image click
+            const img = document.getElementById('gold-ninja');
+            img.addEventListener('click', () => {
+              if (isNinjaGoldPlaying) {
+                ninjaGoldAudio.pause();
+                ninjaGoldAudio.currentTime = 0; // Reset to the start
+              } else {
+                ninjaGoldAudio.play();
+              }
+              isNinjaGoldPlaying = !isNinjaGoldPlaying;
+            });
+          
+            // Function to handle building clicks
+            function handleBuildingClick(building, event) {
+              event.preventDefault(); // Prevent default form submission
+          
+              // Check if the building has already been clicked
+              if (clickedBuildings.has(building)) {
+                console.log(`Sound for ${building} has been disabled.`);
+                event.target.submit(); // Directly submit the form without playing sound
+                return;
+              }
+
+              console.log(`Building clicked: ${building}`);
+              clickedBuildings.add(building);
+
+          
+              // Play sound for the building and mark it as clicked
+              const soundPath = `/static/sounds/${building}.wav`;
+              const sound = new Audio(soundPath);
+          
+              sound.play().then(() => {
+                clickedBuildings.add(building); // Mark the building as clicked after sound plays
+                event.target.submit(); // Submit the form after the sound finishes
+              }).catch(err => {
+                console.warn(`Error playing sound for ${building}:`, err);
+                event.target.submit(); // Fallback: Submit the form immediately
+              });
+            }
+          
+            // Reset clicked buildings on "Reset Gold" link click
+            const resetLink = document.querySelector('a[href="/reset"]');
+            if (resetLink) {
+              resetLink.addEventListener('click', () => {
+                clickedBuildings.clear(); // Reset the state
+                console.log('Reset performed. All buildings are available for sound playback.');
+              });
+            }
+          
+            // Attach the handleBuildingClick function to each building's form
+            document.querySelectorAll('form').forEach(form => {
+              const building = form.querySelector('input[name="building"]').value;
+              form.addEventListener('submit', (event) => handleBuildingClick(building, event));
+            });
+          });
+          
+        </script>
+
+        <!-- // Not this one and Above -->
+        <!-- <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            // Retrieve the sound file path from the backend
+            const soundToPlay = "{{ request.session.sound_to_play|escapejs }}";
+          
+            // Ninjagold.wav audio for the gold-ninja image
+            const ninjaGoldAudio = new Audio('{% static "sounds/ninjagold.wav" %}');
+            ninjaGoldAudio.loop = true; // Enable continuous looping
+
+                // Auto Start code below
+                try {
+                  ninjaGoldAudio.play();
+                } catch (err) {
+                  console.warn('Autoplay might be blocked by the browser', err);
+                }
+                // Auto Start code above
+            
+            let isNinjaGoldPlaying = false;
+          
+            // Handle ninjagold.wav play/pause functionality on image click
+            const img = document.getElementById('gold-ninja');
+            
+
+            img.addEventListener('click', () => {
+              if (isNinjaGoldPlaying) {
+                ninjaGoldAudio.pause();
+                ninjaGoldAudio.currentTime = 0; // Reset to the start
+              } else {
+                ninjaGoldAudio.play();
+              }
+              isNinjaGoldPlaying = !isNinjaGoldPlaying;
+            });
+          
+            // Handle other dynamic sound files from backend
+            if (soundToPlay) {
+              const dynamicAudio = new Audio('/' + soundToPlay); // Dynamically load the sound file path
+              let isDynamicAudioPlaying = false;
+          
+              // Automatically play the dynamic sound if needed
+              try {
+                dynamicAudio.play();
+                isDynamicAudioPlaying = true;
+              } catch (err) {
+                console.warn('Autoplay might be blocked by the browser', err);
+              }
+          
+              // Ensure dynamic sound logic doesn't interfere with ninjagold.wav
+              dynamicAudio.addEventListener('ended', () => {
+                isDynamicAudioPlaying = false; // Reset the state when sound ends
+              });
+          
+              // Optionally, you can add logic to toggle dynamicAudio playback elsewhere
+            }
+          
+            // Function to handle building click logic
+            function handleBuildingClick(building, event) {
+              event.preventDefault(); // Prevent default form submission
+              const soundPath = `/static/sounds/${building}.wav`; // Use dynamic sound paths
+          
+              const sound = new Audio(soundPath);
+              sound.play().then(() => {
+                // Submit the form after the sound finishes playing (optional)
+                event.target.submit();
+              }).catch(err => {
+                console.warn('Error playing sound:', err);
+                event.target.submit(); // Submit immediately if sound fails
+              });
+            }
+          });
+          
+        </script> -->
+
+        <!-- // Not this one and Above repeat lst kept sound-->
+        <!-- <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            // Retrieve the sound file path from the backend
+            const soundToPlay = "{{ request.session.sound_to_play|escapejs }}";
+          
+            if (soundToPlay) {
+              const audio = new Audio('/' + soundToPlay); // Dynamically load the sound file path
+              let isPlaying = false;
+          
+              // Automatically play the sound if needed
+              try {
+                audio.play();
+              } catch (err) {
+                console.warn('Autoplay might be blocked by the browser', err);
+              }
+          
+              // Handle play/pause functionality on image click
+              const img = document.getElementById('gold-ninja');
+              img.addEventListener('click', () => {
+                if (isPlaying) {
+                  audio.pause();
+                  audio.currentTime = 0; // Reset to the start
+                } else {
+                  audio.play();
+                }
+                isPlaying = !isPlaying;
+              });
+
+              function handleBuildingClick(building, event) {
+                event.preventDefault(); // Prevent default form submission
+                const soundPath = `/static/sounds/${building}.wav`; // Use dynamic sound paths
+              
+                const sound = new Audio(soundPath);
+                sound.play().then(() => {
+                  // Submit the form after the sound finishes playing (optional)
+                  event.target.submit();
+                }).catch(err => {
+                  console.warn('Error playing sound:', err);
+                  event.target.submit(); // Submit immediately if sound fails
+                });
+              }
+              
+
+            }
+          });
+          
+        </script> -->
+
+        <!-- // Not this one and Above Just head musicd-->
+        <!-- <script>
           document.addEventListener('DOMContentLoaded', () => {
             const img = document.getElementById('gold-ninja');
             const audio = new Audio('{% static "sounds/ninjagold.wav" %}');
@@ -187,8 +546,9 @@
               isPlaying = !isPlaying;
             });
           });
-        </script>
-        
+        </script> -->
+       
+      <!-- // Not this one and Above Just head musicd-->
       <!-- <script>
         // Initialize the toggle state for sound
         let soundEnabled = true;
@@ -215,7 +575,7 @@
       </script> -->
 
 
-
+      <!-- // Not this one and Above plays both win/loss-->
       <!-- <script>
         let soundEnabled = true;
         const clickedBuildings = new Set();

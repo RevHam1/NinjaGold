@@ -1,3 +1,4 @@
+import json  # Add this to the top
 import os
 import random
 
@@ -260,14 +261,28 @@ def process_money(request):
             request.session['activites'].append(message)
             request.session['sound_to_play'] = sound
 
-    # Update game conditions
+    # # Update game conditions
+    # request.session['all_lost_conditions_met'] = (
+    #     'farm' in request.session['used_buildings']
+    #     and 'cave' in request.session['used_buildings']
+    #     and 'house' in request.session['used_buildings']
+    #     and request.session['gold'] < 0
+    # )
+    # request.session['win_condition_met'] = request.session['casino_visits'] >= 15
+
+    # request.session['last_building'] = building
+
+    # Check if all conditions for "loss" are met
+    farm_used = 'farm' in request.session['used_buildings']
+    cave_used = 'cave' in request.session['used_buildings']
+    house_used = 'house' in request.session['used_buildings']
+    negative_gold = request.session['gold'] < 0
+    max_casino_visits_reached = request.session['casino_visits'] >= 15
+
     request.session['all_lost_conditions_met'] = (
-        'farm' in request.session['used_buildings']
-        and 'cave' in request.session['used_buildings']
-        and 'house' in request.session['used_buildings']
-        and request.session['gold'] < 0
+        farm_used and cave_used and house_used and negative_gold
     )
-    request.session['win_condition_met'] = request.session['casino_visits'] >= 15
+    request.session['win_condition_met'] = max_casino_visits_reached
 
     # Save session changes
     request.session.modified = True

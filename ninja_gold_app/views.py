@@ -14,22 +14,8 @@ from django.shortcuts import HttpResponse, redirect, render
 
 # Test Supabase connection
 def supabase_test(request):
-    # Your Supabase URL from environment variables
-    SUPABASE_URL = settings.SUPABASE_URL
-    SUPABASE_KEY = settings.SUPABASE_KEY  # Your Supabase API Key
+    return JsonResponse({"message": "Function is running successfully!"})
 
-    headers = {
-        "apikey": SUPABASE_KEY,
-        "Authorization": f"Bearer {SUPABASE_KEY}"
-    }
-
-    # Test connection to Supabase without accessing a table
-    response = requests.get(SUPABASE_URL, headers=headers)
-
-    if response.status_code == 200:
-        return JsonResponse({"message": "Successfully connected to Supabase!", "status": response.status_code})
-    else:
-        return JsonResponse({"error": "Failed to connect to Supabase", "details": response.text}, status=response.status_code)
 
 
 def index(request):

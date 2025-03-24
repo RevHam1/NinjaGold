@@ -2,6 +2,8 @@ import json  # Add this to the top
 import os
 import random
 
+import requests
+from django.conf import settings
 from django.http import JsonResponse
 # import pygame  # Ensure pygame is installed or remove sound functionality if not needed
 from django.shortcuts import HttpResponse, redirect, render
@@ -10,31 +12,24 @@ from django.shortcuts import HttpResponse, redirect, render
 # pygame.mixer.init()
 
 
-import requests
-from django.http import JsonResponse
-from django.conf import settings
-
 # Test Supabase connection
 def supabase_test(request):
-    SUPABASE_URL = settings.SUPABASE_URL  # Your Supabase URL from environment variables
+    # Your Supabase URL from environment variables
+    SUPABASE_URL = settings.SUPABASE_URL
     SUPABASE_KEY = settings.SUPABASE_KEY  # Your Supabase API Key
 
     headers = {
         "apikey": SUPABASE_KEY,
-        "Authorization": f"Bearer {SUPABASE_KEY}",
-        "Content-Type": "application/json"
+        "Authorization": f"Bearer {SUPABASE_KEY}"
     }
 
-    # Replace 'your_table_name' with the name of the table you'd like to query
-    endpoint = f"{SUPABASE_URL}/rest/v1/your_table_name"
-    response = requests.get(endpoint, headers=headers)
+    # Test connection to Supabase without accessing a table
+    response = requests.get(SUPABASE_URL, headers=headers)
 
     if response.status_code == 200:
-        return JsonResponse(response.json(), safe=False)
+        return JsonResponse({"message": "Successfully connected to Supabase!", "status": response.status_code})
     else:
         return JsonResponse({"error": "Failed to connect to Supabase", "details": response.text}, status=response.status_code)
-
-
 
 
 def index(request):

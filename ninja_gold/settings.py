@@ -132,8 +132,8 @@ DATABASES = {
 
         'DATABASE_URL': config('POSTGRES_URL'),
 
-        'SUPABASE_URL': config('SUPABASE_URL'),
         'SUPABASE_KEY': config('SUPABASE_KEY'),
+        'SUPABASE_URL': config('SUPABASE_URL'), 
     }
 }
 

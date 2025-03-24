@@ -10,6 +10,33 @@ from django.shortcuts import HttpResponse, redirect, render
 # pygame.mixer.init()
 
 
+import requests
+from django.http import JsonResponse
+from django.conf import settings
+
+# Test Supabase connection
+def supabase_test(request):
+    SUPABASE_URL = settings.SUPABASE_URL  # Your Supabase URL from environment variables
+    SUPABASE_KEY = settings.SUPABASE_KEY  # Your Supabase API Key
+
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    # Replace 'your_table_name' with the name of the table you'd like to query
+    endpoint = f"{SUPABASE_URL}/rest/v1/your_table_name"
+    response = requests.get(endpoint, headers=headers)
+
+    if response.status_code == 200:
+        return JsonResponse(response.json(), safe=False)
+    else:
+        return JsonResponse({"error": "Failed to connect to Supabase", "details": response.text}, status=response.status_code)
+
+
+
+
 def index(request):
     if 'gold' not in request.session:
         request.session['gold'] = 0

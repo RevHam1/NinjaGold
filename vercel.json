@@ -1,14 +1,6 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "ninja_gold/wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "runtime": "python@3.10"
-      }
-    }
-  ],
+
   "routes": [
     {
       "src": "/(.*)",

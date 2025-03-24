@@ -5,32 +5,17 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <link rel="icon" href="{% static 'favicon.ico' %}" />
     <title>Ninja Gold</title>
-
-    <!-- Include Canvas Confetti Library -->
     {{ request.session.used_buildings|json_script:"used-buildings-data" }}
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const usedBuildings = JSON.parse(document.getElementById("used-buildings-data").textContent);
-            console.log("Used Buildings:", usedBuildings);
-        });
-    </script>
-  
-    <script>
-        const usedBuildings = JSON.parse(document.getElementById("used-buildings-data").textContent);
-        console.log("Used Buildings:", usedBuildings);
-    </script>  
-
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
   </head>
   <body>
     <div id="container">
-      <h3 class="my-total">My Ninja Gold Total is {{request.session.gold}}</h3>
+      <h3 class="my-total">
+        My Ninja Gold Total is {{ request.session.gold }}
+      </h3>
       {% if request.session.all_lost_conditions_met %}
       <p class="loose">
         You've been at the "Casino" too long. You "LOST" Take a break or Reset
@@ -41,691 +26,175 @@
         Congratulations! You've reached the maximum Casino visits and secured a
         "BIG WIN!"
       </p>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Load audio files
-        const winSound = new Audio("/static/sounds/applause3.wav"); // Path to applause sound
-        const loseSound = new Audio("/static/sounds/boo.wav"); // Path to boo sound
-    
-        // Check if the game is won or lost based on the condition
-        const isGameWon = "{{ request.session.win_condition_met }}" === "True"; // Check the winning condition
-        const isGameLost = "{{ request.session.all_lost_conditions_met }}" === "True"; // Check the losing condition
-    
-        // Debugging logs to inspect conditions
-        console.log("Game Won Condition:", isGameWon);
-        console.log("Game Lost Condition:", isGameLost);
-    
-        // Play sounds based on game status
-        if (isGameLost) {
-            console.log("Game Lost: Waiting for user interaction...");
-            // Add a click listener to unlock autoplay and play the boo sound
-            document.addEventListener("click", () => {
-                loseSound.play().catch(err => console.log("Autoplay unlocked after user interaction:", err));
-            });
-        }
-    
-        if (isGameWon) {
-            console.log("Playing applause sound for win.");
-            winSound.play().catch(err => console.error("Error playing applause3.wav:", err));
-    
-            // Optional: Confetti trigger for winning
-            function launchConfetti() {
-                confetti({
-                    particleCount: 200,
-                    spread: 100,
-                    origin: { y: 0.5 },
-                    colors: ["#ffd700", "#ffb800", "#e6ac00"],
-                });
-            }
-    
-            setInterval(launchConfetti, 1000);
-        }
-    });
-    
-      
-    </script>
-
-      <!-- <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          let count = 0; // Initialize a counter to track repetitions
-
-          // Function to trigger confetti
-          function launchConfetti() {
-            confetti({
-              particleCount: 200, // Number of particles
-              spread: 100, // Spread the confetti widely
-              origin: { y: 0.5 }, // Launch from the middle of the screen
-              colors: ["#ffd700", "#ffb800", "#e6ac00"], // Various gold shades
-            });
-
-            count++; // Increment the counter
-
-            // Stop after 3 repetitions
-            if (count >= 3) {
-              clearInterval(repeatConfetti);
-            }
-          }
-
-          // Repeat the confetti effect every 1 second (1000ms), up to 3 times
-          const repeatConfetti = setInterval(launchConfetti, 1000);
-        });
-      </script> -->
-
       {% endif %}
-      
       <div class="flex-div">
         <div style="text-align: center">
-          <img id="gold-ninja" src="{% static 'images/gold_ninja.jpg' %}" alt="Gold Ninja" />
+          <img
+            id="gold-ninja"
+            src="{% static 'images/gold_ninja.jpg' %}"
+            alt="Gold Ninja"
+          />
         </div>
         <a href="/reset">Reset Gold</a>
-        <br />
         <p class="note">
-          Find Gold in each area below and see your Gold grow. But be careful at the Casino...
+          Find Gold in each area below and see your Gold grow. But be careful at
+          the Casino...
         </p>
       </div>
-
       <div class="location-container">
         <!-- Farm -->
         <div class="location">
           <h2>Farm</h2>
           <p>Earns 50-100 ounces of gold</p>
-          <form
-            action="/process_money"
-            method="POST"
-            onsubmit="handleBuildingClick('farm', event)"
-          >
+          <form action="/process_money" method="POST">
             {% csrf_token %}
             <input type="hidden" name="building" value="farm" />
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
-          {% if 'farm' in request.session.used_buildings %}
-          <p style="color: red;">You've Searched on a Farm.</p>
+          {% if "farm" in request.session.used_buildings %}
+          <p style="color: red">You've Searched on a Farm.</p>
           {% endif %}
         </div>
-      
         <!-- Cave -->
         <div class="location">
           <h2>Cave</h2>
           <p>Earns 100-250 ounces of gold</p>
-          <form
-            action="/process_money"
-            method="POST"
-            onsubmit="handleBuildingClick('cave', event)"
-          >
+          <form action="/process_money" method="POST">
             {% csrf_token %}
             <input type="hidden" name="building" value="cave" />
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
-          {% if 'cave' in request.session.used_buildings %}
-          <p style="color: red;">You Discovered in a Cave.</p>
+          {% if "cave" in request.session.used_buildings %}
+          <p style="color: red">You Discovered in a Cave.</p>
           {% endif %}
         </div>
-      
         <!-- House -->
         <div class="location">
           <h2>House</h2>
           <p>Earns 20-50 ounces of gold</p>
-          <form
-            action="/process_money"
-            method="POST"
-            onsubmit="handleBuildingClick('house', event)"
-          >
+          <form action="/process_money" method="POST">
             {% csrf_token %}
             <input type="hidden" name="building" value="house" />
             <input class="gold" type="submit" value="Find Gold!" />
           </form>
-          {% if 'house' in request.session.used_buildings %}
-          <p style="color: red;">You Stolen from a House.</p>
+          {% if "house" in request.session.used_buildings %}
+          <p style="color: red">You Stolen from a House.</p>
           {% endif %}
-
         </div>
-      
         <!-- Casino -->
         <div class="location">
           <h2>Casino</h2>
           {% if request.session.gold < 1 %}
-            <h6 style="color: red; font-size: medium; text-align: center">
-              No Gold! No Casino!
-              <form action="/process_money" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="building" value="casino" />
-                <input class="gold" type="submit" value="Need Gold!" />
-              </form>
-            </h6>
+          <p style="color: red; font-size: medium; text-align: center">
+            No Gold! No Casino!
+          </p>
+          <form action="/process_money" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="building" value="casino" />
+            <input class="gold" type="submit" value="Need Gold!" />
+          </form>
           {% else %}
-            <p>Earn/lose 0-50 Gold ounces</p>
-            <form
-              action="/process_money"
-              method="POST"
-              onsubmit="handleBuildingClick('casino', event)"
-            >
-              {% csrf_token %}
-              <input type="hidden" name="building" value="casino" />
-              <input class="gold" type="submit" value="Play UNTIL" />
-            </form>
-           
-          
+          <p>Earn/lose 0-50 Gold ounces</p>
+          <form action="/process_money" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="building" value="casino" />
+            <input class="gold" type="submit" value="Play UNTIL" />
+          </form>
           {% endif %}
         </div>
-      
       </div>
-  
-          <h4>Activities</h4>
-
-          <div class="activity">
-            {%for activity in request.session.activites%} {%if "Yay" in activity%}
-            <p class="green">{{activity}}</p>
-            {% else %}
-            <p class="red">{{activity}}</p>
-            {% endif %} {% endfor %}
-          </div>
-        </div>
-
-        <!-- <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            const ninjaGoldAudio = new Audio('{% static "sounds/ninjagold.wav" %}');
-            ninjaGoldAudio.loop = true;
-        
-            // Auto Start the background music
-            try {
-              ninjaGoldAudio.play();
-            } catch (err) {
-              console.warn('Autoplay might be blocked by the browser', err);
-            }
-        
-            let isNinjaGoldPlaying = true;
-        
-            const img = document.getElementById('gold-ninja');
-            img.addEventListener('click', () => {
-              if (isNinjaGoldPlaying) {
-                ninjaGoldAudio.pause();
-                ninjaGoldAudio.currentTime = 0;
-              } else {
-                ninjaGoldAudio.play();
-              }
-              isNinjaGoldPlaying = !isNinjaGoldPlaying;
-            });
-        
-            // Store clicked buildings in sessionStorage
-            const clickedBuildings = JSON.parse(sessionStorage.getItem('clickedBuildings')) || [];
-        
-            // Retrieve the correct casino sound from Django session
-            const casinoResult = "{{ request.session.sound_to_play }}"; 
-        
-            document.addEventListener('DOMContentLoaded', () => {
-              const soundToPlay = "{{ request.session.sound_to_play|escapejs }}";
-              
-              if (soundToPlay) {
-                  const audio = new Audio('/' + soundToPlay);
-                  console.log("Playing sound:", soundToPlay);
-          
-                  audio.play().then(() => {
-                      console.log("Sound played successfully.");
-                      setTimeout(() => {
-                          window.location.reload();
-                      }, 2000);  // 2-second delay before refresh
-                  }).catch(err => {
-                      console.warn("Error playing sound:", err);
-                      window.location.reload(); // Refresh anyway if sound fails
-                  });
-              }
-          });
-          
-        
-            document.querySelectorAll('.location form').forEach(form => {
-              const building = form.querySelector('input[name="building"]').value;
-              form.addEventListener('submit', event => handleBuildingClick(event, building));
-            });
-          });
-        </script> -->
-        
-
-        <!-- <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            // Set to track which buildings have been clicked
-            const clickedBuildings = new Set();
-          
-            // Ninjagold.wav for the gold-ninja image
-            const ninjaGoldAudio = new Audio('{% static "sounds/ninjagold.wav" %}');
-            ninjaGoldAudio.loop = true; // Enable continuous looping
-          
-            // Auto Start ninjagold.wav
-            try {
-              ninjaGoldAudio.play();
-            } catch (err) {
-              console.warn('Autoplay might be blocked by the browser', err);
-            }
-          
-            let isNinjaGoldPlaying = false;
-          
-            // Handle ninjagold.wav play/pause functionality on image click
-            const img = document.getElementById('gold-ninja');
-            img.addEventListener('click', () => {
-              if (isNinjaGoldPlaying) {
-                ninjaGoldAudio.pause();
-                ninjaGoldAudio.currentTime = 0; // Reset to the start
-              } else {
-                ninjaGoldAudio.play();
-              }
-              isNinjaGoldPlaying = !isNinjaGoldPlaying;
-            });
-          
-            // Function to handle building clicks
-            function handleBuildingClick(building, event) {
-              event.preventDefault(); // Prevent default form submission
-          
-              let soundPath;
-          
-              // Check if the building was already clicked
-              if (clickedBuildings.has(building)) {
-                // Play ohwell.wav for subsequent clicks
-                soundPath = `/static/sounds/ohwell.wav`;
-              } else {
-                // Play the specific sound for the building the first time
-                soundPath = `/static/sounds/${building}.wav`;
-                clickedBuildings.add(building); // Mark the building as clicked
-              }
-          
-              // Play the determined sound
-              const sound = new Audio(soundPath);
-              sound.play().then(() => {
-                // Submit the form after the sound finishes playing (optional)
-                event.target.submit();
-              }).catch(err => {
-                console.warn(`Error playing sound for ${building}:`, err);
-                event.target.submit(); // Submit immediately if sound fails
-              });
-            }
-          
-            // Reset clicked buildings on "Reset Gold" link click
-            const resetLink = document.querySelector('a[href="/reset"]');
-            if (resetLink) {
-              resetLink.addEventListener('click', () => {
-                clickedBuildings.clear(); // Reset the state
-                console.log('Reset performed. All buildings reset for sound playback.');
-              });
-            }
-          
-            // Attach the handleBuildingClick function to each building's form
-            document.querySelectorAll('form').forEach(form => {
-              const buildingInput = form.querySelector('input[name="building"]');
-              if (buildingInput) {
-                const building = buildingInput.value;
-            
-                console.log(`Building to track: ${building}`); // Debug log
-            
-                form.addEventListener('submit', (event) => {
-                  event.preventDefault();
-            
-                  if (clickedBuildings.has(building)) {
-                    console.log(`${building} already clicked. Playing ohwell.wav.`);
-                    const sound = new Audio('/static/sounds/ohwell.wav');
-                    sound.play().then(() => form.submit());
-                  } else {
-                    console.log(`Adding ${building} to clickedBuildings.`);
-                    clickedBuildings.add(building);
-                    const sound = new Audio(`/static/sounds/${building}.wav`);
-                    sound.play().then(() => form.submit());
-                  }
-                });
-              } else {
-                console.warn("Building input not found in this form.");
-              }
-            });
-            
-          });
-          
-        </script> -->
-
-
-        <script>
-          document.addEventListener("DOMContentLoaded", function () {
-            const goldNinja = document.getElementById("gold-ninja");
-            const ninjaSound = new Audio("{% static 'sounds/ninjagold.wav' %}");
-            let isPlaying = false;
-        
-            // Toggle sound on image click
-            goldNinja.addEventListener("click", function () {
-                if (isPlaying) {
-                    ninjaSound.pause();
-                    ninjaSound.currentTime = 0; // Reset sound
-                } else {
-                    ninjaSound.play();
-                }
-                isPlaying = !isPlaying;
-            });
-        
-            // Ensure sound stops when it ends
-            ninjaSound.addEventListener("ended", function () {
-                isPlaying = false;
-            });
-        
-            // Add event listeners for form submission to track buildings clicked
-            document.querySelectorAll("form").forEach(form => {
-                form.addEventListener("submit", function (event) {
-                    const building = this.querySelector("input[name='building']").value;
-                    console.log("Submitting form for:", building);
-                });
-            });
-        });
-        
-
-          document.addEventListener("DOMContentLoaded", () => {
-              // Retrieve the sound file from the session
-              const soundToPlay = "{{ request.session.sound_to_play|default:''|escapejs }}";
-          
-              // Function to play sound
-              function playSound(soundFile) {
-                  if (soundFile) {
-                      console.log("Attempting to play sound:", soundFile);
-                      const audio = new Audio('/' + soundFile);
-                      audio.play()
-                          .then(() => console.log("Sound played successfully"))
-                          .catch(err => console.warn("Sound playback error:", err));
-                  } else {
-                      console.warn("No sound file provided.");
-                  }
-              }
-          
-              // Play the sound
-              if (soundToPlay) {
-                  playSound(soundToPlay);
-              } else {
-                  console.log("No sound assigned.");
-              }
-          });
-          </script>
-                    
-
-        <!-- // Not this one and Above -->
-        <!-- <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            // Keep track of clicked buildings to avoid replaying sounds
-            const clickedBuildings = new Set();
-          
-            // Retrieve the sound file path from the backend for dynamic audio
-            const soundToPlay = "{{ request.session.sound_to_play|escapejs }}";
-          
-            // Ninjagold.wav audio for the gold-ninja image
-            const ninjaGoldAudio = new Audio('{% static "sounds/ninjagold.wav" %}');
-            ninjaGoldAudio.loop = true; // Enable continuous looping
-          
-            
-          
-            let isNinjaGoldPlaying = false;
-          
-            // Handle ninjagold.wav play/pause functionality on image click
-            const img = document.getElementById('gold-ninja');
-            img.addEventListener('click', () => {
-              if (isNinjaGoldPlaying) {
-                ninjaGoldAudio.pause();
-                ninjaGoldAudio.currentTime = 0; // Reset to the start
-              } else {
-                ninjaGoldAudio.play();
-              }
-              isNinjaGoldPlaying = !isNinjaGoldPlaying;
-            });
-          
-            // Function to handle building clicks
-            function handleBuildingClick(building, event) {
-              event.preventDefault(); // Prevent default form submission
-          
-              // Check if the building has already been clicked
-              if (clickedBuildings.has(building)) {
-                console.log(`Sound for ${building} has been disabled.`);
-                event.target.submit(); // Directly submit the form without playing sound
-                return;
-              }
-
-              console.log(`Building clicked: ${building}`);
-              clickedBuildings.add(building);
-
-          
-              // Play sound for the building and mark it as clicked
-              const soundPath = `/static/sounds/${building}.wav`;
-              const sound = new Audio(soundPath);
-          
-              sound.play().then(() => {
-                clickedBuildings.add(building); // Mark the building as clicked after sound plays
-                event.target.submit(); // Submit the form after the sound finishes
-              }).catch(err => {
-                console.warn(`Error playing sound for ${building}:`, err);
-                event.target.submit(); // Fallback: Submit the form immediately
-              });
-            }
-          
-            // Reset clicked buildings on "Reset Gold" link click
-            const resetLink = document.querySelector('a[href="/reset"]');
-            if (resetLink) {
-              resetLink.addEventListener('click', () => {
-                clickedBuildings.clear(); // Reset the state
-                console.log('Reset performed. All buildings are available for sound playback.');
-              });
-            }
-          
-            // Attach the handleBuildingClick function to each building's form
-            document.querySelectorAll('form').forEach(form => {
-              const building = form.querySelector('input[name="building"]').value;
-              form.addEventListener('submit', (event) => handleBuildingClick(building, event));
-            });
-          });
-          
-        </script> -->
-
-
-
-
-
-        <!-- // Not this one and Above -->
-        <!-- <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            // Retrieve the sound file path from the backend
-            const soundToPlay = "{{ request.session.sound_to_play|escapejs }}";
-          
-            // Ninjagold.wav audio for the gold-ninja image
-            const ninjaGoldAudio = new Audio('{% static "sounds/ninjagold.wav" %}');
-            ninjaGoldAudio.loop = true; // Enable continuous looping
-
-                // Auto Start code below
-                try {
-                  ninjaGoldAudio.play();
-                } catch (err) {
-                  console.warn('Autoplay might be blocked by the browser', err);
-                }
-                // Auto Start code above
-            
-            let isNinjaGoldPlaying = false;
-          
-            // Handle ninjagold.wav play/pause functionality on image click
-            const img = document.getElementById('gold-ninja');
-            
-
-            img.addEventListener('click', () => {
-              if (isNinjaGoldPlaying) {
-                ninjaGoldAudio.pause();
-                ninjaGoldAudio.currentTime = 0; // Reset to the start
-              } else {
-                ninjaGoldAudio.play();
-              }
-              isNinjaGoldPlaying = !isNinjaGoldPlaying;
-            });
-          
-            // Handle other dynamic sound files from backend
-            if (soundToPlay) {
-              const dynamicAudio = new Audio('/' + soundToPlay); // Dynamically load the sound file path
-              let isDynamicAudioPlaying = false;
-          
-              // Automatically play the dynamic sound if needed
-              try {
-                dynamicAudio.play();
-                isDynamicAudioPlaying = true;
-              } catch (err) {
-                console.warn('Autoplay might be blocked by the browser', err);
-              }
-          
-              // Ensure dynamic sound logic doesn't interfere with ninjagold.wav
-              dynamicAudio.addEventListener('ended', () => {
-                isDynamicAudioPlaying = false; // Reset the state when sound ends
-              });
-          
-              // Optionally, you can add logic to toggle dynamicAudio playback elsewhere
-            }
-          
-            // Function to handle building click logic
-            function handleBuildingClick(building, event) {
-              event.preventDefault(); // Prevent default form submission
-              const soundPath = `/static/sounds/${building}.wav`; // Use dynamic sound paths
-          
-              const sound = new Audio(soundPath);
-              sound.play().then(() => {
-                // Submit the form after the sound finishes playing (optional)
-                event.target.submit();
-              }).catch(err => {
-                console.warn('Error playing sound:', err);
-                event.target.submit(); // Submit immediately if sound fails
-              });
-            }
-          });
-          
-        </script> -->
-
-        <!-- // Not this one and Above repeat lst kept sound-->
-        <!-- <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            // Retrieve the sound file path from the backend
-            const soundToPlay = "{{ request.session.sound_to_play|escapejs }}";
-          
-            if (soundToPlay) {
-              const audio = new Audio('/' + soundToPlay); // Dynamically load the sound file path
-              let isPlaying = false;
-          
-              // Automatically play the sound if needed
-              try {
-                audio.play();
-              } catch (err) {
-                console.warn('Autoplay might be blocked by the browser', err);
-              }
-          
-              // Handle play/pause functionality on image click
-              const img = document.getElementById('gold-ninja');
-              img.addEventListener('click', () => {
-                if (isPlaying) {
-                  audio.pause();
-                  audio.currentTime = 0; // Reset to the start
-                } else {
-                  audio.play();
-                }
-                isPlaying = !isPlaying;
-              });
-
-              function handleBuildingClick(building, event) {
-                event.preventDefault(); // Prevent default form submission
-                const soundPath = `/static/sounds/${building}.wav`; // Use dynamic sound paths
-              
-                const sound = new Audio(soundPath);
-                sound.play().then(() => {
-                  // Submit the form after the sound finishes playing (optional)
-                  event.target.submit();
-                }).catch(err => {
-                  console.warn('Error playing sound:', err);
-                  event.target.submit(); // Submit immediately if sound fails
-                });
-              }
-              
-
-            }
-          });
-          
-        </script> -->
-
-        <!-- // Not this one and Above Just head musicd-->
-        <!-- <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            const img = document.getElementById('gold-ninja');
-            const audio = new Audio('{% static "sounds/ninjagold.wav" %}');
-            audio.loop = true; // Enables continuous looping
-
-            // Auto Start code below
-            try {
-              audio.play();
-            } catch (err) {
-              console.warn('Autoplay might be blocked by the browser', err);
-            }
-            // Auto Start code above
-
-            let isPlaying = false;
-        
-            img.addEventListener('click', () => {
-              if (isPlaying) {
-                audio.pause();
-                audio.currentTime = 0; // Reset to the start
-              } else {
-                audio.play();
-              }
-              isPlaying = !isPlaying;
-            });
-          });
-        </script> -->
-       
-      <!-- // Not this one and Above Just head musicd-->
-      <!-- <script>
-        // Initialize the toggle state for sound
-        let soundEnabled = true;
-      
-        // Keep track of clicked buildings
-        const clickedBuildings = new Set();
-      
-        // Function to toggle the sound on/off
-        function toggleSound() {
-          soundEnabled = !soundEnabled;
-          const toggleButton = document.getElementById("sound-toggle");
-          toggleButton.textContent = soundEnabled ? "Sound: On" : "Sound: Off";
-        }
-        
-        function handleBuildingClick(building, event) {
-          // Prevent the form from submitting the traditional way
-          event.preventDefault();
-      
-          // Play the sound file
-          const sound = new Audio(`/static/sounds/${building}.wav`);
-          sound.play();
-
-          
-      </script> -->
-
-
-      <!-- // Not this one and Above plays both win/loss-->
-      <!-- <script>
-        let soundEnabled = true;
-        const clickedBuildings = new Set();
-      
-        function toggleSound() {
-          soundEnabled = !soundEnabled;
-          document.getElementById("sound-toggle").textContent = soundEnabled ? "Sound: On" : "Sound: Off";
-        }
-      
-        function handleBuildingClick(building, event) {
-          event.preventDefault();
-          
-          const sound = new Audio(`/static/sounds/${building}.wav`);
-          const form = event.target;
-      
-          if (soundEnabled) {
-            sound.play().then(() => form.submit());
-          } else {
-            form.submit();
-          }
-      
-          // Show message only once
-          if (!clickedBuildings.has(building)) {
-            clickedBuildings.add(building);
-            document.getElementById(`${building}-message`).style.display = "block";
-          }
-        }
-      </script> -->
-`
-
+      <h4>Activities</h4>
+      <div class="activity">
+        {% for activity in request.session.activites %} {% if "Yay" in activity
+        %}
+        <p class="green">{{ activity }}</p>
+        {% endfor %}
+        <p class="red">{{ activity }}</p>
+      </div>
     </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const winSound = new Audio("/static/sounds/applause3.wav");
+        const loseSound = new Audio("/static/sounds/boo.wav");
+        const ninjaSound = new Audio("{% static 'sounds/ninjagold.wav' %}");
+        const soundToPlay =
+          "{{ request.session.sound_to_play|default:''|escapejs }}";
+        const usedBuildings = JSON.parse(
+          document.getElementById("used-buildings-data").textContent
+        );
+        const isGameWon = "{{ request.session.win_condition_met }}" === "True";
+        const isGameLost =
+          "{{ request.session.all_lost_conditions_met|yesno:'True,False' }}" ===
+          "True";
+
+        console.log("Used Buildings:", usedBuildings);
+        console.log("Game Won Condition:", isGameWon);
+        console.log("Game Lost Condition:", isGameLost);
+
+        // Handle game-lost condition
+        if (isGameLost) {
+          console.log("Game Lost: Waiting for user interaction...");
+          loseSound
+            .play()
+            .catch((err) => console.error("Error playing boo.wav:", err));
+        } else if (isGameWon) {
+          // Execute only if game is not lost
+          console.log("Playing applause sound for win.");
+          winSound
+            .play()
+            .catch((err) => console.error("Error playing applause3.wav:", err));
+
+          ninjaSound.play();
+
+          let count = 0;
+          const repeatConfetti = setInterval(() => {
+            confetti({
+              particleCount: 200,
+              spread: 100,
+              origin: { y: 0.5 },
+              colors: ["#ffd700", "#ffb800", "#e6ac00"],
+            });
+            count++;
+            if (count >= 10) clearInterval(repeatConfetti);
+          }, 1000);
+        }
+
+        // Gold Ninja click sound
+        const goldNinja = document.getElementById("gold-ninja");
+        let isPlaying = false;
+
+        goldNinja.addEventListener("click", function () {
+          if (isPlaying) {
+            ninjaSound.pause();
+            ninjaSound.currentTime = 0;
+          } else {
+            ninjaSound.play();
+          }
+          isPlaying = !isPlaying;
+        });
+
+        ninjaSound.addEventListener("ended", function () {
+          isPlaying = false;
+        });
+
+        // Handle form submissions
+        document.querySelectorAll("form").forEach((form) => {
+          form.addEventListener("submit", function () {
+            const building = this.querySelector("input[name='building']").value;
+            console.log("Submitting form for:", building);
+          });
+        });
+
+        // Play session-assigned sound
+        if (soundToPlay) {
+          const sessionAudio = new Audio("/" + soundToPlay);
+          sessionAudio
+            .play()
+            .catch((err) => console.warn("Sound playback error:", err));
+        } else {
+          console.log("No sound assigned.");
+        }
+      });
+    </script>
   </body>
 </html>

@@ -17,7 +17,6 @@ def supabase_test(request):
     return JsonResponse({"message": "Function is running successfully!"})
 
 
-
 def index(request):
     if 'gold' not in request.session:
         request.session['gold'] = 0
@@ -287,9 +286,17 @@ def process_money(request):
     negative_gold = request.session['gold'] < 0
     max_casino_visits_reached = request.session['casino_visits'] >= 15
 
+    # request.session['all_lost_conditions_met'] = (
+    #     farm_used and cave_used and house_used and negative_gold
+    # )
+    # print(request.session['all_lost_conditions_met'])
+
     request.session['all_lost_conditions_met'] = (
         farm_used and cave_used and house_used and negative_gold
     )
+    print("All Lost Conditions Met:",
+          request.session['all_lost_conditions_met'])
+
     request.session['win_condition_met'] = max_casino_visits_reached
 
     # Save session changes

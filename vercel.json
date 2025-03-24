@@ -15,5 +15,5 @@
       "dest": "ninja_gold/wsgi.py"
     }
   ],
-  "installCommand": "pip install --upgrade setuptools pip wheel && pip install --disable-pip-version-check --upgrade -r requirements.txt"
+  "installCommand": "pip install --no-index --find-links=./precompiled_packages -r requirements.txt"
 }

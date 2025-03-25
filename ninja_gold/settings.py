@@ -130,9 +130,9 @@ DATABASES = {
         'HOST': config('POSTGRES_HOST'),
         'PORT': config('PORT', default='5432'),
 
-        'DATABASE_URL': config('POSTGRES_URL'),
+        'POSTGRES_URL': config('POSTGRES_URL'),
 
-        'SUPABASE_KEY': config('SUPABASE_KEY'),
+        'NEXT_PUBLIC_SUPABASE_ANON_KEY': config('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
         'SUPABASE_URL': config('SUPABASE_URL'), 
     }
 }

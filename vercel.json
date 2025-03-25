@@ -1,11 +1,15 @@
 {
   "version": 2,
-
+  "builds": [
+    {
+      "src": "ninja_gold/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",
       "dest": "ninja_gold/wsgi.py"
     }
-  ],
-  "installCommand": "pip install --no-index --find-links=./precompiled_packages -r requirements.txt"
+  ]
 }

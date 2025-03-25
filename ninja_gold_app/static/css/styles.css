@@ -309,7 +309,7 @@ p {
   .note {
     color: white;
     margin-bottom: 0px;
-    margin-top: -3px;
+    margin-top: 10px;
     text-align: center;
     font-size: 0.65em;
   }

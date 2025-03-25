@@ -104,17 +104,24 @@
         </div>
       </div>
       <h4>Activities</h4>
-      <div class="activity">
+      <!-- <div class="activity">
         {% for activity in request.session.activites %} {% if "Yay" in activity
         %}
         <p class="green">{{ activity }}</p>
         {% endfor %}
         <p class="red">{{ activity }}</p>
+      </div> -->
+      <div class="activity">
+        {%for activity in request.session.activites%} {%if "Yay" in activity%}
+        <p class="green">{{activity}}</p>
+        {% else %}
+        <p class="red">{{activity}}</p>
+        {% endif %} {% endfor %}
       </div>
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const winSound = new Audio("/static/sounds/applause3.wav");
+        const winSound = new Audio("/static/sounds/applause4.mp3");
         const loseSound = new Audio("/static/sounds/boo.wav");
         const ninjaSound = new Audio("{% static 'sounds/ninjagold.wav' %}");
         const soundToPlay =
@@ -142,7 +149,7 @@
           console.log("Playing applause sound for win.");
           winSound
             .play()
-            .catch((err) => console.error("Error playing applause3.wav:", err));
+            .catch((err) => console.error("Error playing applause4.mp3:", err));
 
           ninjaSound.play();
 
@@ -155,7 +162,7 @@
               colors: ["#ffd700", "#ffb800", "#e6ac00"],
             });
             count++;
-            if (count >= 10) clearInterval(repeatConfetti);
+            if (count >= 11) clearInterval(repeatConfetti);
           }, 1000);
         }
 

@@ -11,6 +11,15 @@ from django.shortcuts import HttpResponse, redirect, render
 # Test Supabase connection
 # def supabase_test(request):
 #     return JsonResponse({"message": "Function is running successfully!"})
+# from ninja_gold_app.utils.supabase_utils import fetch_data_from_table
+
+# def supabasedata(request):
+#     try:
+#         data = fetch_data_from_table("your_table_name")
+#         return JsonResponse({"data": data})
+#     except Exception as e:
+#         return JsonResponse({"error": str(e)}, status=400)
+
 
 
 def index(request):

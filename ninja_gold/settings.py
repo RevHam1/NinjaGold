@@ -120,6 +120,9 @@ WSGI_APPLICATION = 'ninja_gold.wsgi.application'
 #     )
 # }
 
+# SUPABASE_URL = config('SUPABASE_URL')
+# SUPABASE_KEY = config('SUPABASE_KEY')
+
 
 DATABASES = {
     'default': {
@@ -128,12 +131,11 @@ DATABASES = {
         'USER': config('POSTGRES_USER'),
         'PASSWORD': config('POSTGRES_PASSWORD'),
         'HOST': config('POSTGRES_HOST'),
-        'PORT': config('PORT', default='5432'),
+        'PORT': '5432',
 
-        'POSTGRES_URL': config('POSTGRES_URL'),
-
-        'NEXT_PUBLIC_SUPABASE_ANON_KEY': config('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
-        'SUPABASE_URL': config('SUPABASE_URL'), 
+        # 'POSTGRES_URL': config('POSTGRES_URL'),
+        # 'NEXT_PUBLIC_SUPABASE_ANON_KEY': config('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
+        # 'SUPABASE_URL': config('SUPABASE_URL'), 
     }
 }
 

@@ -1,0 +1,12 @@
+from supabase import create_client
+from django.conf import settings
+
+# Initialize Supabase client
+supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+
+def fetch_data_from_table(table_name):
+    """Fetch all rows from a Supabase table."""
+    data, error = supabase.table(table_name).select("*").execute()
+    if error:
+        raise Exception(f"Error fetching data: {error}")
+    return data

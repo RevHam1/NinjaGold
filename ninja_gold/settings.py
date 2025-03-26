@@ -127,10 +127,10 @@ WSGI_APPLICATION = 'ninja_gold.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('POSTGRES_DATABASE'),
-        'USER': config('POSTGRES_USER'),
-        'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': config('POSTGRES_HOST'),
+        'POSTGRES_DATABASE': config('POSTGRES_DATABASE'),
+        'POSTGRES_USER': config('POSTGRES_USER'),
+        'POSTGRES_PASSWORD': config('POSTGRES_PASSWORD'),
+        'POSTGRES_HOST': config('POSTGRES_HOST'),
         'PORT': '5432',
 
         # 'POSTGRES_URL': config('POSTGRES_URL'),

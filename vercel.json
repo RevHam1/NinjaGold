@@ -3,13 +3,14 @@
   "builds": [
     {
       "src": "ninja_gold/wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "runtime": "python@3.11"
-      }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "static/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "ninja_gold/wsgi.py"

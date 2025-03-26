@@ -1,5 +1,4 @@
 import json  # Add this to the top
-import logging
 import os
 import random
 
@@ -9,19 +8,10 @@ from django.http import JsonResponse
 # import pygame  # Ensure pygame is installed or remove sound functionality if not needed
 from django.shortcuts import HttpResponse, redirect, render
 
-logger = logging.getLogger(__name__)
 
 # Test Supabase connection
-
-
 def index(request):
-    try:
-        logger.info("Function is running!")
-        return JsonResponse({"message": "Hello, world!"})
-    except Exception as e:
-        logger.error(f"Error occurred: {str(e)}")
-        return JsonResponse({"error": "An error occurred"}, status=500)
-    # return JsonResponse({"message": "Function is running successfully! Yeay"})
+    return JsonResponse({"message": "Function is running successfully!"})
 
 # from ninja_gold_app.utils.supabase_utils import fetch_data_from_table
 

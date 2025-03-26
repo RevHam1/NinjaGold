@@ -104,13 +104,7 @@
         </div>
       </div>
       <h4>Activities</h4>
-      <!-- <div class="activity">
-        {% for activity in request.session.activites %} {% if "Yay" in activity
-        %}
-        <p class="green">{{ activity }}</p>
-        {% endfor %}
-        <p class="red">{{ activity }}</p>
-      </div> -->
+
       <div class="activity">
         {%for activity in request.session.activites%} {%if "Yay" in activity%}
         <p class="green">{{activity}}</p>
@@ -199,7 +193,7 @@
             .play()
             .catch((err) => console.warn("Sound playback error:", err));
         } else {
-          console.log("No sound assigned.");
+          console.log("No sound assigned...");
         }
       });
     </script>

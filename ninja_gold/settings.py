@@ -103,6 +103,21 @@ WSGI_APPLICATION = 'ninja_gold.wsgi.application'
 
 # DATABASES = {
 #     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'POSTGRES_DATABASE': config('POSTGRES_DATABASE'),
+#         'POSTGRES_USER': config('POSTGRES_USER'),
+#         'POSTGRES_PASSWORD': config('POSTGRES_PASSWORD'),
+#         'POSTGRES_HOST': config('POSTGRES_HOST'),
+#         'PORT': '5432',
+
+#         # 'POSTGRES_URL': config('POSTGRES_URL'),
+#         # 'NEXT_PUBLIC_SUPABASE_ANON_KEY': config('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
+#         # 'SUPABASE_URL': config('SUPABASE_URL'), 
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }

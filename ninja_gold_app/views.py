@@ -2,12 +2,11 @@ import json  # Add this to the top
 import os
 import random
 
-# import pygame  # Ensure pygame is installed or remove sound functionality if not needed
-from django.shortcuts import HttpResponse, redirect, render
-
 import requests
 from django.conf import settings
 from django.http import JsonResponse
+# import pygame  # Ensure pygame is installed or remove sound functionality if not needed
+from django.shortcuts import HttpResponse, redirect, render
 
 # Test Supabase connection
 # def index(request):

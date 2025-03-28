@@ -11,3 +11,4 @@ urlpatterns = [
 
     # path('supabasedata/', views.your_view, name='supabasedata'),
 ]
+

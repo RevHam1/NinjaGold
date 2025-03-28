@@ -2,15 +2,17 @@ import json  # Add this to the top
 import os
 import random
 
-import requests
-from django.conf import settings
-from django.http import JsonResponse
 # import pygame  # Ensure pygame is installed or remove sound functionality if not needed
 from django.shortcuts import HttpResponse, redirect, render
 
+import requests
+from django.conf import settings
+from django.http import JsonResponse
+
 # Test Supabase connection
-# def supabase_test(request):
+# def index(request):
 #     return JsonResponse({"message": "Function is running successfully!"})
+
 # from ninja_gold_app.utils.supabase_utils import fetch_data_from_table
 
 # def supabasedata(request):
@@ -19,7 +21,6 @@ from django.shortcuts import HttpResponse, redirect, render
 #         return JsonResponse({"data": data})
 #     except Exception as e:
 #         return JsonResponse({"error": str(e)}, status=400)
-
 
 
 def index(request):
@@ -31,6 +32,7 @@ def index(request):
     if 'used_buildings' not in request.session:
         request.session['used_buildings'] = []
     return render(request, 'index.html')
+
 
 def ninja_gold_game(request):
     # Define building descriptions

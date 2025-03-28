@@ -15,6 +15,29 @@ import os
 import dj_database_url
 from decouple import config
 
+# print("POSTGRES_PASSWORD:", os.getenv('POSTGRES_PASSWORD'))
+# print("POSTGRES_PASSWORD:", config('POSTGRES_PASSWORD'))
+# config('POSTGRES_PASSWORD')
+
+import dj_database_url
+
+# DATABASES = {
+#     'default': dj_database_url.parse(config('POSTGRES_URL'))
+# }
+
+# DATABASES = {
+#     'default': dj_database_url.parse(os.environ.get('POSTGRES_URL'))
+# }
+
+DATABASES = {
+    'default': dj_database_url.parse("postgres://postgres:l5Uf9L4A7Cx3m7cc@db.cqqhkbnuqbqsvifjhqhs.supabase.co:5432/postgres")
+}
+
+print(config('POSTGRES_URL'))
+
+# postgres://postgres:l5Uf9L4A7Cx3m7cc@db.cqqhkbnuqbqsvifjhqhs.supabase.co:5432/postgres
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -80,6 +103,21 @@ WSGI_APPLICATION = 'ninja_gold.wsgi.application'
 
 # DATABASES = {
 #     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'POSTGRES_DATABASE': config('POSTGRES_DATABASE'),
+#         'POSTGRES_USER': config('POSTGRES_USER'),
+#         'POSTGRES_PASSWORD': config('POSTGRES_PASSWORD'),
+#         'POSTGRES_HOST': config('POSTGRES_HOST'),
+#         'PORT': '5432',
+
+#         # 'POSTGRES_URL': config('POSTGRES_URL'),
+#         # 'NEXT_PUBLIC_SUPABASE_ANON_KEY': config('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
+#         # 'SUPABASE_URL': config('SUPABASE_URL'), 
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
@@ -124,20 +162,7 @@ WSGI_APPLICATION = 'ninja_gold.wsgi.application'
 # SUPABASE_KEY = config('SUPABASE_KEY')
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('POSTGRES_DATABASE'),
-        'USER': config('POSTGRES_USER'),
-        'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': config('POSTGRES_HOST'),
-        'PORT': '5432',
 
-        # 'POSTGRES_URL': config('POSTGRES_URL'),
-        # 'NEXT_PUBLIC_SUPABASE_ANON_KEY': config('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
-        # 'SUPABASE_URL': config('SUPABASE_URL'), 
-    }
-}
 
 
 # Password validation
